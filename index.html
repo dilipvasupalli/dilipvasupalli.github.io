@@ -245,9 +245,15 @@ body.edit-mode [data-editable]:focus{outline:2px solid var(--rose);background:rg
 .btn-add-role:hover{border-color:var(--rose);color:var(--rose)}
 
 /* ════════════════════════════════════════ EDIT MODE BANNER */
-.edit-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:1050;background:var(--rose);color:var(--navy);text-align:center;padding:.4rem 1rem;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;font-family:'Nunito',sans-serif;font-weight:600}
+.edit-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:1050;background:var(--rose);color:var(--navy);text-align:center;padding:.4rem 1rem;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-family:'Nunito',sans-serif;font-weight:600;position:relative}
 body.edit-mode .edit-banner{display:block}
-body.edit-mode .nav{top:26px}
+body.edit-mode .nav{top:30px}
+.edit-banner-right{position:absolute;right:1rem;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:.4rem}
+.edit-banner-btn{padding:.22rem .75rem;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(24,23,20,.25);background:rgba(24,23,20,.1);color:var(--navy);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;transition:var(--ease);white-space:nowrap}
+.edit-banner-btn:hover{background:rgba(24,23,20,.22)}
+.edit-banner-btn:disabled{opacity:.55;cursor:default}
+.edit-banner-btn-icon{width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.edit-banner-btn-icon svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
 
 /* ════════════════════════════════════════ EDIT LOCK BUTTON */
 .edit-lock-btn{position:fixed;bottom:2rem;right:2rem;z-index:980;width:44px;height:44px;border-radius:50%;background:var(--hero-bg);border:1px solid rgba(200,169,126,.25);color:rgba(244,237,226,.45);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--ease);box-shadow:0 3px 14px rgba(24,23,20,.35)}
@@ -1007,7 +1013,15 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
 </footer>
 
 <!-- ══════════════ EDIT MODE BANNER ══════════════ -->
-<div class="edit-banner">✏ Edit Mode Active — Click any outlined element to edit text &nbsp;·&nbsp; <strong>Exit</strong> via the lock button ↘</div>
+<div class="edit-banner">
+  ✏ Edit Mode Active — click outlined text to edit &nbsp;·&nbsp; hover cards to upload images
+  <div class="edit-banner-right">
+    <button class="edit-banner-btn" id="btnSaveGH">↑ Save to GitHub</button>
+    <button class="edit-banner-btn edit-banner-btn-icon" id="btnConfigGH" title="GitHub settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+</div>
 
 <!-- ══════════════ EDIT LOCK BUTTON ══════════════ -->
 <button class="edit-lock-btn" id="editLockBtn" title="Toggle edit mode">
@@ -1180,6 +1194,47 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
   </div>
 </div>
 
+<!-- ══════════════ GITHUB CONFIG MODAL ══════════════ -->
+<div class="modal-backdrop" id="ghConfigBackdrop">
+  <div class="modal" style="max-width:500px">
+    <button class="modal-close" id="ghConfigClose">×</button>
+    <h3 class="modal-title">GitHub Connection</h3>
+    <p class="modal-subtitle">Connect to your repository so edits are saved permanently and visible on every device. Your token is stored only in this browser.</p>
+
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Repository</label>
+        <input type="text" id="gh-repo" placeholder="e.g. dilipvasupalli/portfolio-website">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Branch</label>
+        <input type="text" id="gh-branch" value="main" placeholder="main">
+      </div>
+      <div class="form-group">
+        <label>HTML file path</label>
+        <input type="text" id="gh-filepath" value="index.html" placeholder="index.html">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Personal Access Token (PAT)</label>
+        <input type="password" id="gh-pat" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
+        <span style="font-size:.69rem;color:var(--mauve);margin-top:.4rem;display:block;line-height:1.5">
+          Go to GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → New token.<br>
+          Grant <strong>Contents</strong> (Read &amp; Write) permission on this repository only.
+        </span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="ghConfigCancel">Cancel</button>
+      <button class="btn-submit" id="ghConfigSave">Save Settings</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ EXPERIENCE MODAL ══════════════ -->
 <div class="modal-backdrop" id="expModalBackdrop">
   <div class="modal" style="max-width:720px">
@@ -1254,6 +1309,142 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
 const STORE_KEY = 'dv_portfolio_v2';
 function getStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch{ return{}; } }
 function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }catch{} }
+
+/* ══════════════════════════════════════════════════════
+   GITHUB PERSISTENCE
+   — saves all text/data overrides to portfolio-data.json
+   — fetches on every fresh page load so changes appear everywhere
+   ══════════════════════════════════════════════════════ */
+(()=>{
+  const GH_CFG = 'dv_gh_config';
+  const GH_FETCHED = 'dv_remote_fetched'; // sessionStorage key
+
+  function getGHCfg(){ try{ return JSON.parse(localStorage.getItem(GH_CFG))||{}; }catch{ return{}; } }
+  function setGHCfg(c){ try{ localStorage.setItem(GH_CFG, JSON.stringify(c)); }catch{} }
+
+  /* ── Build the state object to commit ── */
+  function buildState(){
+    const s = getStore();
+    const state = { version:2 };
+    const txt={}, proj={}, tech={}, expOv={}, expDel=[];
+    for(const [k,v] of Object.entries(s)){
+      if(k.startsWith('text-'))             txt[k.slice(5)] = v;
+      if(k.startsWith('proj-override-'))    proj[k.slice(14)] = v;
+      if(k.startsWith('techcard-override-'))tech[k.slice(18)] = v;
+      if(k.startsWith('exp-override-'))     expOv[k.slice(13)] = v;
+      if(k.startsWith('exp-deleted-') && v) expDel.push(k.slice(12));
+    }
+    if(Object.keys(txt).length)   state.textOverrides    = txt;
+    if(Object.keys(proj).length)  state.projectOverrides = proj;
+    if(Object.keys(tech).length)  state.techCardOverrides= tech;
+    if(Object.keys(expOv).length) state.expOverrides     = expOv;
+    if(expDel.length)             state.expDeleted       = expDel;
+    // Custom entries (strip heavy base64 images to keep file small)
+    if(s.customProjects?.length)  state.customProjects   = s.customProjects.map(({imgData,...r})=>r);
+    if(s.customSkills?.length)    state.customSkills     = s.customSkills;
+    if(s.customExp?.length)       state.customExp        = s.customExp;
+    if(s.customCerts?.length)     state.customCerts      = s.customCerts.map(({imgData,...r})=>r);
+    return state;
+  }
+
+  /* ── Apply a fetched state into localStorage (overwrite) ── */
+  function applyState(state){
+    if(!state?.version) return false;
+    const s = getStore();
+    let dirty = false;
+    const merge = (prefix, obj) => {
+      if(!obj) return;
+      Object.entries(obj).forEach(([k,v])=>{ s[prefix+k]=v; dirty=true; });
+    };
+    merge('text-',           state.textOverrides);
+    merge('proj-override-',  state.projectOverrides);
+    merge('techcard-override-', state.techCardOverrides);
+    merge('exp-override-',   state.expOverrides);
+    if(state.expDeleted?.length){ state.expDeleted.forEach(e=>{ s['exp-deleted-'+e]=true; dirty=true; }); }
+    if(state.customProjects?.length && !s.customProjects?.length){ s.customProjects=state.customProjects; dirty=true; }
+    if(state.customSkills?.length   && !s.customSkills?.length)  { s.customSkills=state.customSkills;     dirty=true; }
+    if(state.customExp?.length      && !s.customExp?.length)     { s.customExp=state.customExp;           dirty=true; }
+    if(state.customCerts?.length    && !s.customCerts?.length)   { s.customCerts=state.customCerts;       dirty=true; }
+    if(dirty) setStore(s);
+    return dirty;
+  }
+
+  /* ── Fetch portfolio-data.json on fresh session load ── */
+  async function fetchRemote(){
+    if(sessionStorage.getItem(GH_FETCHED)) return; // already done this session
+    sessionStorage.setItem(GH_FETCHED,'1');
+    try{
+      const r = await fetch('portfolio-data.json?_='+Date.now(),{cache:'no-store'});
+      if(!r.ok) return;
+      const data = await r.json();
+      if(applyState(data)) location.reload(); // re-render with fresh data
+    }catch{}
+  }
+  fetchRemote();
+
+  /* ── Save to GitHub ── */
+  async function saveToGitHub(){
+    const cfg = getGHCfg();
+    if(!cfg.pat||!cfg.repo){
+      document.getElementById('ghConfigBackdrop').dataset.pendingSave='1';
+      document.getElementById('ghConfigBackdrop').classList.add('open');
+      return;
+    }
+    const btn = document.getElementById('btnSaveGH');
+    const orig = btn.textContent;
+    btn.textContent='Saving…'; btn.disabled=true;
+    try{
+      const [owner,repo] = cfg.repo.split('/');
+      const branch = cfg.branch||'main';
+      const filePath = cfg.filepath||'portfolio-data.json';
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+      const headers = { Authorization:`token ${cfg.pat}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' };
+
+      // Get current SHA so we can update (not create duplicate)
+      let sha;
+      const getRes = await fetch(apiUrl,{headers});
+      if(getRes.ok){ const f=await getRes.json(); sha=f.sha; }
+
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(buildState(),null,2))));
+      const body = { message:`Portfolio update ${new Date().toISOString().slice(0,10)}`, content, branch, ...(sha?{sha}:{}) };
+      const putRes = await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify(body)});
+      if(!putRes.ok){ const e=await putRes.json(); throw new Error(e.message||'Unknown error'); }
+
+      btn.textContent='✓ Saved!';
+      setTimeout(()=>{ btn.textContent=orig; btn.disabled=false; },2800);
+    }catch(e){
+      btn.textContent=orig; btn.disabled=false;
+      alert('GitHub save failed:\n'+e.message+'\n\nCheck your token and repository name in ⚙ settings.');
+    }
+  }
+
+  /* ── Button wiring ── */
+  document.getElementById('btnSaveGH').addEventListener('click', saveToGitHub);
+  document.getElementById('btnConfigGH').addEventListener('click',()=>{
+    const cfg=getGHCfg();
+    document.getElementById('gh-repo').value    = cfg.repo||'';
+    document.getElementById('gh-branch').value  = cfg.branch||'main';
+    document.getElementById('gh-filepath').value= cfg.filepath||'portfolio-data.json';
+    document.getElementById('gh-pat').value     = cfg.pat||'';
+    document.getElementById('ghConfigBackdrop').classList.add('open');
+  });
+  document.getElementById('ghConfigClose').addEventListener('click',  ()=>document.getElementById('ghConfigBackdrop').classList.remove('open'));
+  document.getElementById('ghConfigCancel').addEventListener('click', ()=>document.getElementById('ghConfigBackdrop').classList.remove('open'));
+  document.getElementById('ghConfigBackdrop').addEventListener('click',e=>{ if(e.target===document.getElementById('ghConfigBackdrop')) document.getElementById('ghConfigBackdrop').classList.remove('open'); });
+  document.getElementById('ghConfigSave').addEventListener('click',()=>{
+    const repo  = document.getElementById('gh-repo').value.trim();
+    const branch= document.getElementById('gh-branch').value.trim()||'main';
+    const fp    = document.getElementById('gh-filepath').value.trim()||'portfolio-data.json';
+    const pat   = document.getElementById('gh-pat').value.trim();
+    if(!repo||!pat){ alert('Please enter both the repository (owner/repo) and your Personal Access Token.'); return; }
+    setGHCfg({repo,branch,filepath:fp,pat});
+    document.getElementById('ghConfigBackdrop').classList.remove('open');
+    if(document.getElementById('ghConfigBackdrop').dataset.pendingSave==='1'){
+      document.getElementById('ghConfigBackdrop').dataset.pendingSave='';
+      saveToGitHub();
+    }
+  });
+})();
 
 /* ══════════════════════════════════════════════════════
    PASSWORD-PROTECTED EDIT MODE

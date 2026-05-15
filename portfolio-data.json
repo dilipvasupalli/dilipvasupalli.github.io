@@ -1,0 +1,109 @@
+{
+  "version": 2,
+  "projectOverrides": {
+    "four-seasons": {
+      "name": "Diriyah Four Seasons Hotel",
+      "desc": "Landmark mixed-use development by DGDA integrating hospitality, residential, retail, and entertainment. Draws inspiration from Najdi architectural language at the UNESCO Heritage Site of At-Turaif, Ad-Diriyah.",
+      "regionLabel": "🇸🇦 KSA",
+      "region": "ksa",
+      "lod": "LOD 300",
+      "type": "Hospitality",
+      "area": "21,331 sqm",
+      "role": "BIM Coordinator (Multi-Discipline)",
+      "cde": "BIM 360",
+      "duration": "6 Months"
+    },
+    "qiddiya": {
+      "name": "Qiddiya Water Park Hotel",
+      "desc": "Immersive entertainment destination in Qiddiya's East Village. Conceptual inspiration drawn from Aqua Regia — adopting principles of velocity architecture where movement is embedded within the geometry of form.",
+      "regionLabel": "🇸🇦 KSA",
+      "region": "ksa",
+      "lod": "LOD 350",
+      "type": "Hospitality",
+      "area": "24,000 sqm",
+      "role": "BIM Coordinator (Multi-Discipline) & BIM Manager",
+      "cde": "BIM 360",
+      "duration": "6 Months"
+    }
+  },
+  "techCardOverrides": {
+    "clash-1": {
+      "title": "Clash Detection Setup",
+      "desc": "Structured clash tests between disciplines using a defined matrix — Architecture vs MEP, Structure vs MEP, and inter-discipline checks for complete coverage."
+    },
+    "clash-2": {
+      "title": "Clash Matrix Creation",
+      "desc": "Systematic creation and tracking of clash matrix"
+    },
+    "clash-4": {
+      "title": "Weekly Viewpoints Creation",
+      "desc": "Creating viewpoints on unresolved clashes, floating elements found on visual checks."
+    },
+    "clash-3": {
+      "title": "Issues Creation for Unresolved Clashes",
+      "desc": "Creating issues for unresolved clashes discussed over every weekly BIM Coordination meetings."
+    }
+  },
+  "expOverrides": {
+    "eid1": {
+      "company": "DSA Architects International",
+      "badge": "3 Years 3 Months · Ongoing",
+      "roles": [
+        {
+          "title": "BIM Manager",
+          "meta": "Aug 2025 – Present · Riyadh, Saudi Arabia"
+        },
+        {
+          "title": "BIM Coordinator",
+          "meta": "Nov 2024 – Aug 2025 · Riyadh, Saudi Arabia"
+        },
+        {
+          "title": "BIM Coordinator",
+          "meta": "Feb 2023 – Nov 2024 · Hyderabad, India"
+        }
+      ]
+    },
+    "eid2": {
+      "company": "elogic Tech Solutions India Pvt. Ltd.",
+      "badge": "2 Years 8 Months",
+      "roles": [
+        {
+          "title": "BIM Project Coordinator",
+          "meta": "May 2021 – Jan 2023 · Hyderabad, India"
+        },
+        {
+          "title": "BIM Modeler",
+          "meta": "Oct 2020 – May 2021 · Hyderabad, India"
+        }
+      ]
+    }
+  },
+  "customProjects": [
+    {
+      "id": 1778859714123,
+      "region": "europe",
+      "regionLabel": "🌍 Europe",
+      "name": "Vabi RowHouses",
+      "type": "Residential",
+      "lod": "LOD 300",
+      "desc": "The Vabi Rowhouses development in the Netherlands represents a modern approach to sustainable residential urban planning, where BIM (Building Information Modelling) methodologies are integrated to improve design coordination, energy efficiency, and construction management. Dutch rowhouse developments are widely recognized for combining compact urban living with high environmental performance and standardized modular construction systems.",
+      "area": "15,000 Sq.m",
+      "role": "BIM Engineer",
+      "cde": "BIM360",
+      "duration": "1 Year"
+    },
+    {
+      "id": 1778860502340,
+      "region": "europe",
+      "regionLabel": "🌍 Europe",
+      "name": "Convento Corpus Christi",
+      "type": "Other",
+      "lod": "LOD 500",
+      "desc": "The Convento Corpus Christi refurbishment project in Portugal involved the digital preservation and renovation of a historic heritage structure using advanced BIM and laser scanning methodologies. The project utilized a Scan-to-BIM workflow, where terrestrial laser scanning technology was employed to capture highly accurate point cloud data of the existing convent geometry, including irregular walls, vaulted ceilings, historical architectural elements, and structural conditions. This digital survey approach significantly improved accuracy compared to conventional manual measurement methods",
+      "area": "25,000 Sq.m",
+      "role": "BIM Coordinator",
+      "cde": "BIM360",
+      "duration": "3 Months"
+    }
+  ]
+}

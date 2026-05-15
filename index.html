@@ -50,7 +50,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
 .hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(34,34,59,.45) 100%)}
 .hero-content{position:relative;text-align:center;padding:2rem;max-width:900px}
 .hero-eyebrow{display:inline-block;font-size:.68rem;letter-spacing:.4em;text-transform:uppercase;color:var(--rose);margin-bottom:1.75rem}
-.hero-name{font-family:'Libre Baskerville',serif;font-size:clamp(3rem,9vw,7.5rem);font-weight:300;color:var(--cream);letter-spacing:.12em;line-height:1;margin-bottom:.5rem}
+.hero-name{font-family:'Libre Baskerville',serif;font-size:clamp(2rem,5vw,4.2rem);font-weight:400;color:var(--cream);letter-spacing:.12em;line-height:1.1;margin-bottom:.5rem}
 .hero-title{font-family:'Libre Baskerville',serif;font-size:clamp(1.1rem,2.5vw,1.8rem);color:var(--mauve);letter-spacing:.35em;text-transform:uppercase;margin-bottom:2rem}
 .hero-divider{width:40px;height:1px;background:var(--rose);margin:0 auto 2rem}
 .hero-meta{display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap;margin-bottom:3rem}
@@ -194,6 +194,86 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
 .footer{background:var(--hero-bg);padding:1.5rem 5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;border-top:1px solid rgba(200,169,126,.15)}
 .footer-text{font-size:.72rem;color:rgba(244,237,226,.55);letter-spacing:.06em}
 
+/* ════════════════════════════════════════ EDIT MODE — VISIBILITY GATES */
+/* Hide all edit controls from regular visitors */
+body:not(.edit-mode) .upload-overlay{display:none!important}
+body:not(.edit-mode) .file-input{display:none!important;pointer-events:none!important}
+body:not(.edit-mode) .btn-add-project{display:none!important}
+body:not(.edit-mode) .delete-btn{display:none!important}
+body:not(.edit-mode) .card-edit-btn{display:none!important}
+body:not(.edit-mode) .btn-add-exp{display:none!important}
+body:not(.edit-mode) .btn-add-skill{display:none!important}
+body:not(.edit-mode) .timeline-edit-controls{display:none!important}
+body:not(.edit-mode) .img-wrap,.body:not(.edit-mode) .media-wrap,.body:not(.edit-mode) .cert-badge-wrap{cursor:default}
+/* Always-visible overlays when in edit mode */
+body.edit-mode .upload-overlay{opacity:1!important;display:flex!important}
+body.edit-mode .img-wrap,.body.edit-mode .media-wrap,.body.edit-mode .cert-badge-wrap{cursor:pointer}
+/* Editable text elements in edit mode */
+body.edit-mode [data-editable]{outline:1px dashed rgba(200,169,126,.5);cursor:text;border-radius:2px}
+body.edit-mode [data-editable]:hover{outline-color:var(--rose);background:rgba(200,169,126,.06)}
+body.edit-mode [data-editable]:focus{outline:2px solid var(--rose);background:rgba(200,169,126,.1)}
+
+/* ════════════════════════════════════════ CARD PENCIL EDIT BUTTON */
+.card-edit-btn{position:absolute;top:8px;left:8px;z-index:10;width:28px;height:28px;background:rgba(24,23,20,.78);border:1px solid rgba(200,169,126,.5);border-radius:50%;color:var(--cream);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--ease)}
+.card-edit-btn:hover{background:var(--rose);border-color:var(--rose);color:var(--navy)}
+.card-edit-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ════════════════════════════════════════ TIMELINE EDIT CONTROLS */
+.timeline-edit-controls{display:flex;gap:.5rem;margin-top:.85rem}
+.btn-tl-edit,.btn-tl-del{padding:.35rem .95rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif;border:1px solid;display:inline-flex;align-items:center;gap:.35rem;background:transparent}
+.btn-tl-edit{border-color:var(--border);color:var(--mauve)}
+.btn-tl-edit:hover{border-color:var(--rose);color:var(--rose)}
+.btn-tl-del{border-color:rgba(192,57,43,.3);color:rgba(192,57,43,.65)}
+.btn-tl-del:hover{background:rgba(192,57,43,.08);border-color:rgba(192,57,43,.6);color:rgba(192,57,43,.9)}
+.btn-tl-edit svg,.btn-tl-del svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ════════════════════════════════════════ ADD EXPERIENCE / SKILL BUTTONS */
+.btn-add-exp{display:inline-flex;align-items:center;gap:.5rem;margin-top:2rem;padding:.65rem 1.6rem;background:var(--rose);border:1px solid var(--rose);color:var(--navy);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif;font-weight:600}
+.btn-add-exp:hover{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+.btn-add-exp svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.btn-add-skill{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.75rem;padding:.55rem 1.4rem;background:var(--rose);border:1px solid var(--rose);color:var(--navy);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif;font-weight:600}
+.btn-add-skill:hover{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+.btn-add-skill svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ════════════════════════════════════════ EXPERIENCE MODAL — ROLE ROWS */
+.roles-list{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.4rem}
+.role-entry{display:grid;grid-template-columns:1fr 1fr auto;gap:.6rem;align-items:end}
+.role-entry-del{width:34px;height:38px;background:transparent;border:1px solid rgba(192,57,43,.3);color:rgba(192,57,43,.65);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--ease);flex-shrink:0}
+.role-entry-del:hover{background:rgba(192,57,43,.1);border-color:rgba(192,57,43,.7)}
+.role-entry-del svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.btn-add-role{background:transparent;border:1px dashed var(--border);color:var(--mauve);padding:.5rem 1rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;font-family:'Nunito',sans-serif;transition:var(--ease);margin-bottom:1rem}
+.btn-add-role:hover{border-color:var(--rose);color:var(--rose)}
+
+/* ════════════════════════════════════════ EDIT MODE BANNER */
+.edit-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:1050;background:var(--rose);color:var(--navy);text-align:center;padding:.4rem 1rem;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;font-family:'Nunito',sans-serif;font-weight:600}
+body.edit-mode .edit-banner{display:block}
+body.edit-mode .nav{top:26px}
+
+/* ════════════════════════════════════════ EDIT LOCK BUTTON */
+.edit-lock-btn{position:fixed;bottom:2rem;right:2rem;z-index:980;width:44px;height:44px;border-radius:50%;background:var(--hero-bg);border:1px solid rgba(200,169,126,.25);color:rgba(244,237,226,.45);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--ease);box-shadow:0 3px 14px rgba(24,23,20,.35)}
+.edit-lock-btn:hover{border-color:var(--rose);color:var(--rose);transform:scale(1.08)}
+.edit-lock-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);color:var(--navy)}
+
+/* ════════════════════════════════════════ PASSWORD MODAL */
+.pwd-backdrop{position:fixed;inset:0;z-index:1100;background:rgba(24,23,20,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.pwd-backdrop.open{opacity:1;pointer-events:all}
+.pwd-box{background:var(--white);width:100%;max-width:380px;padding:2.5rem;position:relative;border-top:3px solid var(--rose)}
+.pwd-title{font-family:'Libre Baskerville',serif;font-size:1.5rem;color:var(--navy);margin-bottom:.3rem}
+.pwd-sub{font-size:.76rem;color:var(--mauve);margin-bottom:1.75rem;line-height:1.6}
+.pwd-input-wrap{position:relative;margin-bottom:.6rem}
+.pwd-input{width:100%;padding:.75rem 2.8rem .75rem 1rem;border:1px solid var(--border);background:var(--cream);color:var(--navy);font-size:.9rem;font-family:'Nunito',sans-serif;outline:none;transition:border-color .2s ease}
+.pwd-input:focus{border-color:var(--rose)}
+.pwd-eye{position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--mauve);display:flex;align-items:center;padding:0}
+.pwd-eye svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8}
+.pwd-error{font-size:.72rem;color:#c0392b;margin-bottom:.75rem;display:none;letter-spacing:.02em}
+.pwd-error.show{display:block}
+.pwd-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.25rem}
+.pwd-cancel{padding:.6rem 1.5rem;background:transparent;border:1px solid var(--border);color:var(--mauve);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif}
+.pwd-cancel:hover{border-color:var(--navy);color:var(--navy)}
+.pwd-submit{padding:.6rem 1.5rem;background:var(--rose);border:1px solid var(--rose);color:var(--navy);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif;font-weight:600}
+.pwd-submit:hover{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+
 /* ════════════════════════════════════════ ADD PROJECT MODAL */
 .modal-backdrop{position:fixed;inset:0;z-index:1000;background:rgba(34,34,59,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .3s ease}
 .modal-backdrop.open{opacity:1;pointer-events:all}
@@ -249,7 +329,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
 /* ════════════════════════════════════════ RESPONSIVE */
 @media(max-width:1024px){.nav,.nav.scrolled{padding-left:3rem;padding-right:3rem}.section{padding-left:3rem;padding-right:3rem}.footer{padding-left:3rem;padding-right:3rem}}
 @media(max-width:860px){.nav,.nav.scrolled{padding-left:1.5rem;padding-right:1.5rem}.nav-links{gap:1.5rem}.section{padding:4rem 1.5rem}.footer{padding:1.5rem;flex-direction:column;text-align:center}.about-grid{grid-template-columns:1fr;gap:3rem}.about-stats{grid-template-columns:repeat(4,1fr)}.projects-grid{grid-template-columns:1fr}.tech-grid{grid-template-columns:1fr}.contact-links{gap:2rem}.form-row{grid-template-columns:1fr}}
-@media(max-width:560px){.nav-links{display:none}.about-stats{grid-template-columns:repeat(2,1fr)}.hero-name{font-size:2.8rem}.btn-add-project{margin-left:0}.filter-bar{flex-direction:row}}
+@media(max-width:560px){.nav-links{display:none}.about-stats{grid-template-columns:repeat(2,1fr)}.hero-name{font-size:1.9rem}.btn-add-project{margin-left:0}.filter-bar{flex-direction:row}}
 </style>
 </head>
 <body>
@@ -272,18 +352,18 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
   <div class="hero-grid"></div>
   <div class="hero-vignette"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">BIM Portfolio</div>
+    <div class="hero-eyebrow" data-editable data-key="hero-eyebrow">BIM Portfolio</div>
     <h1 class="hero-name" style="text-transform:uppercase;letter-spacing:.16em">DILIP VASUPALLI</h1>
-    <p class="hero-title">BIM Manager</p>
+    <p class="hero-title" data-editable data-key="hero-title">BIM Manager</p>
     <div class="hero-divider"></div>
     <div class="hero-meta">
-      <span class="hero-meta-item">9+ Years Experience</span>
+      <span class="hero-meta-item" data-editable data-key="hero-meta-1">9+ Years Experience</span>
       <span class="hero-meta-sep"></span>
-      <span class="hero-meta-item">KSA · Canada · USA · India</span>
+      <span class="hero-meta-item" data-editable data-key="hero-meta-2">KSA · Canada · USA · India</span>
       <span class="hero-meta-sep"></span>
-      <span class="hero-meta-item">RICS Qualified</span>
+      <span class="hero-meta-item" data-editable data-key="hero-meta-3">RICS Qualified</span>
       <span class="hero-meta-sep"></span>
-      <span class="hero-meta-item">Riyadh, Saudi Arabia</span>
+      <span class="hero-meta-item" data-editable data-key="hero-meta-4">Riyadh, Saudi Arabia</span>
     </div>
     <a href="#projects" class="hero-cta">View Projects</a>
   </div>
@@ -301,8 +381,8 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
     <div class="section-line fade-in"></div>
     <div class="about-grid">
       <div>
-        <p class="about-bio fade-in">I am a BIM professional with nearly nine years of industry experience, currently operating as a BIM Manager at DSA Architects International in Riyadh, Saudi Arabia. My expertise spans multi-disciplinary BIM coordination, clash management, and the strategic implementation of digital information workflows to support efficient, compliant, and high-quality project delivery.</p>
-        <p class="about-bio fade-in">My work has taken me across global markets — from landmark luxury hospitality developments in Saudi Arabia's Diriyah and Qiddiya districts, to mixed-use residential towers across British Columbia, Canada, and educational facilities in Nevada, USA. I specialise in automating repetitive BIM workflows through Python and C# scripting, and in delivering real-time project insights through custom Power BI dashboards.</p>
+        <p class="about-bio fade-in" data-editable data-key="about-bio-1">I am a BIM professional with nearly nine years of industry experience, currently operating as a BIM Manager at DSA Architects International in Riyadh, Saudi Arabia. My expertise spans multi-disciplinary BIM coordination, clash management, and the strategic implementation of digital information workflows to support efficient, compliant, and high-quality project delivery.</p>
+        <p class="about-bio fade-in" data-editable data-key="about-bio-2">My work has taken me across global markets — from landmark luxury hospitality developments in Saudi Arabia's Diriyah and Qiddiya districts, to mixed-use residential towers across British Columbia, Canada, and educational facilities in Nevada, USA. I specialise in automating repetitive BIM workflows through Python and C# scripting, and in delivering real-time project insights through custom Power BI dashboards.</p>
         <span class="skills-label fade-in">Software &amp; Technical Skills</span>
         <div class="skills-grid fade-in">
           <span class="skill-tag">Autodesk Revit</span><span class="skill-tag">Navisworks</span>
@@ -346,7 +426,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
     <div class="section-line fade-in"></div>
     <div class="timeline">
 
-      <div class="timeline-item fade-in">
+      <div class="timeline-item fade-in" data-eid="eid1">
         <div class="timeline-company">DSA Architects International</div>
         <span class="timeline-badge" id="dsaDuration">Calculating…</span>
         <div class="timeline-roles">
@@ -356,7 +436,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
         </div>
       </div>
 
-      <div class="timeline-item fade-in">
+      <div class="timeline-item fade-in" data-eid="eid2">
         <div class="timeline-company">Elogic Tech Solutions India Pvt. Ltd.</div>
         <span class="timeline-badge">2 Years 8 Months</span>
         <div class="timeline-roles">
@@ -365,7 +445,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
         </div>
       </div>
 
-      <div class="timeline-item fade-in">
+      <div class="timeline-item fade-in" data-eid="eid3">
         <div class="timeline-company">Zuru Tech India Pvt. Ltd.</div>
         <span class="timeline-badge">1 Year</span>
         <div class="timeline-roles">
@@ -373,7 +453,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
         </div>
       </div>
 
-      <div class="timeline-item fade-in">
+      <div class="timeline-item fade-in" data-eid="eid4">
         <div class="timeline-company">Eshia Solutions Pvt. Ltd.</div>
         <span class="timeline-badge">2 Years</span>
         <div class="timeline-roles">
@@ -381,6 +461,10 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
         </div>
       </div>
 
+      <button class="btn-add-exp" id="btnAddExp">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Experience
+      </button>
     </div>
   </div>
 </section>
@@ -657,6 +741,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
     <!-- Clash Coordination -->
     <div class="tech-panel active" id="panel-clash">
       <p class="tech-intro">Multi-disciplinary clash coordination managed end-to-end using Navisworks — from clash matrix setup and viewpoint creation through to issue management and HTML tabular report generation.</p>
+      <button class="btn-add-skill" data-tab="clash"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Skill Card</button>
       <div class="tech-grid">
         <div class="tech-card fade-in">
           <div class="media-wrap" data-slot="clash-1">
@@ -696,6 +781,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
     <!-- Power BI -->
     <div class="tech-panel" id="panel-powerbi">
       <p class="tech-intro">Custom Power BI dashboards giving teams real-time visibility into BIM health — tracking clash resolution, model compliance, issue status, and weekly deliverable submissions across all disciplines.</p>
+      <button class="btn-add-skill" data-tab="powerbi"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Skill Card</button>
       <div class="tech-grid">
         <div class="tech-card fade-in">
           <div class="media-wrap" data-slot="pbi-1">
@@ -743,6 +829,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
     <!-- Dynamo -->
     <div class="tech-panel" id="panel-dynamo">
       <p class="tech-intro">Visual programming scripts in Dynamo and Python automating repetitive Revit tasks — eliminating hours of manual modelling and reducing human error across large multi-discipline projects.</p>
+      <button class="btn-add-skill" data-tab="dynamo"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Skill Card</button>
       <div class="tech-grid">
         <div class="tech-card fade-in">
           <div class="media-wrap empty" data-slot="dynamo-1">
@@ -782,6 +869,7 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
     <!-- Revit Families -->
     <div class="tech-panel" id="panel-families">
       <p class="tech-intro">Complex parametric Revit family creation and conceptual mass modelling — bespoke components including adaptive components, nested families, and formula-driven geometry for unique architectural elements.</p>
+      <button class="btn-add-skill" data-tab="families"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Skill Card</button>
       <div class="tech-grid">
         <div class="tech-card fade-in">
           <div class="media-wrap empty" data-slot="fam-1">
@@ -917,6 +1005,34 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
   <span class="footer-text">© 2025 Dilip Vasupalli · BIM Manager</span>
   <span class="footer-text">Riyadh, Saudi Arabia · dilipvasupalli@gmail.com</span>
 </footer>
+
+<!-- ══════════════ EDIT MODE BANNER ══════════════ -->
+<div class="edit-banner">✏ Edit Mode Active — Click any outlined element to edit text &nbsp;·&nbsp; <strong>Exit</strong> via the lock button ↘</div>
+
+<!-- ══════════════ EDIT LOCK BUTTON ══════════════ -->
+<button class="edit-lock-btn" id="editLockBtn" title="Toggle edit mode">
+  <svg id="iconLocked" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+  <svg id="iconUnlocked" viewBox="0 0 24 24" style="display:none"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.93-.57"/></svg>
+</button>
+
+<!-- ══════════════ PASSWORD MODAL ══════════════ -->
+<div class="pwd-backdrop" id="pwdBackdrop">
+  <div class="pwd-box">
+    <h3 class="pwd-title">Owner Access</h3>
+    <p class="pwd-sub">Enter your password to unlock edit mode. You'll be able to replace images, videos, update text, and manage projects.</p>
+    <div class="pwd-input-wrap">
+      <input type="password" class="pwd-input" id="pwdInput" placeholder="Password" autocomplete="current-password">
+      <button class="pwd-eye" id="pwdEyeBtn" type="button">
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <div class="pwd-error" id="pwdError">Incorrect password. Please try again.</div>
+    <div class="pwd-actions">
+      <button class="pwd-cancel" id="pwdCancel">Cancel</button>
+      <button class="pwd-submit" id="pwdSubmit">Unlock</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════ ADD CERTIFICATION MODAL ══════════════ -->
 <div class="modal-backdrop" id="certModalBackdrop">
@@ -1064,11 +1180,187 @@ button,input,select,textarea{font-family:'Nunito',sans-serif}
   </div>
 </div>
 
+<!-- ══════════════ EXPERIENCE MODAL ══════════════ -->
+<div class="modal-backdrop" id="expModalBackdrop">
+  <div class="modal" style="max-width:720px">
+    <button class="modal-close" id="expModalClose">×</button>
+    <h3 class="modal-title" id="expModalTitle">Add Work Experience</h3>
+    <p class="modal-subtitle" id="expModalSub">Fill in the company details and add one or more roles below.</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="ef-company" placeholder="e.g. Atkins Global">
+      </div>
+      <div class="form-group">
+        <label>Duration Badge</label>
+        <input type="text" id="ef-badge" placeholder="e.g. 3 Years 2 Months">
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:.6rem">
+      <label>Roles (add one or more)</label>
+    </div>
+    <div class="roles-list" id="rolesList"></div>
+    <button class="btn-add-role" id="btnAddRole" type="button">+ Add Another Role</button>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="expBtnCancel">Cancel</button>
+      <button class="btn-submit" id="expBtnSubmit">Add Experience</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SKILL CARD MODAL ══════════════ -->
+<div class="modal-backdrop" id="skillModalBackdrop">
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" id="skillModalClose">×</button>
+    <h3 class="modal-title" id="skillModalTitle">Add Skill Card</h3>
+    <p class="modal-subtitle">Add a new skill card to the selected tab, or edit an existing one.</p>
+
+    <div class="form-row full" id="skillTabRow">
+      <div class="form-group">
+        <label>Tab</label>
+        <select id="sf-tab">
+          <option value="clash">Clash Coordination</option>
+          <option value="powerbi">Power BI Dashboards</option>
+          <option value="dynamo">Dynamo &amp; Scripting</option>
+          <option value="families">Revit Families</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="sf-title" placeholder="e.g. Revit Schedule Automation">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="sf-desc" placeholder="Brief description of this skill or tool…" style="min-height:80px"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="skillBtnCancel">Cancel</button>
+      <button class="btn-submit" id="skillBtnSubmit">Add Skill Card</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ JAVASCRIPT ══════════════ -->
 <script>
 const STORE_KEY = 'dv_portfolio_v2';
 function getStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch{ return{}; } }
 function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }catch{} }
+
+/* ══════════════════════════════════════════════════════
+   PASSWORD-PROTECTED EDIT MODE
+   ══════════════════════════════════════════════════════ */
+(()=>{
+  const HASH = 'a1e628949120a3ef98d6f8b4e087caa7a72ab68dc83df95e1398068dac2c6d15';
+  const SESSION_KEY = 'dv_edit_session';
+
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  /* ── Enter / Exit ── */
+  function enterEditMode(){
+    document.body.classList.add('edit-mode');
+    sessionStorage.setItem(SESSION_KEY,'1');
+    document.getElementById('iconLocked').style.display='none';
+    document.getElementById('iconUnlocked').style.display='';
+    document.getElementById('editLockBtn').title='Exit edit mode';
+    activateEditableText();
+  }
+  function exitEditMode(){
+    document.body.classList.remove('edit-mode');
+    sessionStorage.removeItem(SESSION_KEY);
+    document.getElementById('iconLocked').style.display='';
+    document.getElementById('iconUnlocked').style.display='none';
+    document.getElementById('editLockBtn').title='Toggle edit mode';
+    deactivateEditableText();
+  }
+
+  /* ── Editable text ── */
+  function activateEditableText(){
+    const s = getStore();
+    document.querySelectorAll('[data-editable]').forEach(el=>{
+      const key = 'text-'+el.dataset.key;
+      if(s[key]) el.textContent = s[key];
+      el.contentEditable = 'true';
+      el.addEventListener('blur', saveText, {passive:true});
+      el.addEventListener('keydown', e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); el.blur(); }});
+    });
+  }
+  function deactivateEditableText(){
+    document.querySelectorAll('[data-editable]').forEach(el=>{
+      el.contentEditable = 'false';
+      el.removeEventListener('blur', saveText);
+    });
+  }
+  function saveText(e){
+    const el = e.target;
+    const key = 'text-'+el.dataset.key;
+    const s = getStore(); s[key] = el.textContent.trim(); setStore(s);
+  }
+
+  /* ── Restore saved text on every page load ── */
+  function restoreText(){
+    const s = getStore();
+    document.querySelectorAll('[data-editable]').forEach(el=>{
+      const key = 'text-'+el.dataset.key;
+      if(s[key]) el.textContent = s[key];
+    });
+  }
+  restoreText();
+
+  /* ── Session restore ── */
+  if(sessionStorage.getItem(SESSION_KEY)==='1') enterEditMode();
+
+  /* ── Lock button ── */
+  document.getElementById('editLockBtn').addEventListener('click',()=>{
+    if(document.body.classList.contains('edit-mode')){
+      exitEditMode();
+    } else {
+      openPwdModal();
+    }
+  });
+
+  /* ── Password modal ── */
+  const backdrop = document.getElementById('pwdBackdrop');
+  const input    = document.getElementById('pwdInput');
+  const error    = document.getElementById('pwdError');
+
+  function openPwdModal(){
+    input.value=''; error.classList.remove('show');
+    backdrop.classList.add('open');
+    setTimeout(()=>input.focus(),120);
+  }
+  function closePwdModal(){
+    backdrop.classList.remove('open');
+    input.value=''; error.classList.remove('show');
+  }
+
+  document.getElementById('pwdCancel').addEventListener('click', closePwdModal);
+  backdrop.addEventListener('click', e=>{ if(e.target===backdrop) closePwdModal(); });
+
+  async function attemptUnlock(){
+    const h = await sha256(input.value);
+    if(h===HASH){ closePwdModal(); enterEditMode(); }
+    else{ error.classList.add('show'); input.value=''; input.focus(); }
+  }
+  document.getElementById('pwdSubmit').addEventListener('click', attemptUnlock);
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') attemptUnlock(); });
+
+  /* ── Show/hide password eye ── */
+  document.getElementById('pwdEyeBtn').addEventListener('click',()=>{
+    input.type = input.type==='password' ? 'text' : 'password';
+  });
+})();
 
 /* ── NAV scroll ── */
 const mainNav = document.getElementById('mainNav');
@@ -1199,8 +1491,22 @@ const btnClose  = document.getElementById('modalClose');
 const btnCancel = document.getElementById('btnCancel');
 const btnSubmit = document.getElementById('btnSubmit');
 let pendingImgData = null;
+let editingProjectSlot = null; // non-null when editing a static project card
 
-btnOpen.addEventListener('click', ()=>{ backdrop.classList.add('open'); pendingImgData=null; resetForm(); });
+function setProjectModalMode(mode){ // 'add' or 'edit'
+  const isEdit = mode==='edit';
+  document.querySelector('#modalBackdrop .modal-title').textContent = isEdit ? 'Edit Project' : 'Add New Project';
+  document.querySelector('#modalBackdrop .modal-subtitle').textContent = isEdit ? 'Update the details below. Changes are saved automatically.' : 'Fill in the details below. Your project will be saved and appear in the portfolio.';
+  btnSubmit.textContent = isEdit ? 'Save Changes' : 'Add to Portfolio';
+}
+
+btnOpen.addEventListener('click', ()=>{
+  editingProjectSlot = null;
+  setProjectModalMode('add');
+  backdrop.classList.add('open');
+  pendingImgData = null;
+  resetForm();
+});
 [btnClose, btnCancel].forEach(b=>b.addEventListener('click', ()=>backdrop.classList.remove('open')));
 backdrop.addEventListener('click', e=>{ if(e.target===backdrop) backdrop.classList.remove('open'); });
 
@@ -1301,8 +1607,8 @@ function buildProjectCard(p, isNew=false){
 }
 
 btnSubmit.addEventListener('click', ()=>{
-  const name = document.getElementById('f-name').value.trim();
-  const cVal  = document.getElementById('f-country').value;
+  const name    = document.getElementById('f-name').value.trim();
+  const cVal    = document.getElementById('f-country').value;
   const cCustom = document.getElementById('f-country-custom').value.trim();
   if(!name){ alert('Please enter a project name.'); return; }
   if(!cVal) { alert('Please select a country.'); return; }
@@ -1311,11 +1617,40 @@ btnSubmit.addEventListener('click', ()=>{
   const rLabel    = regionLabel(cVal, cCustom);
   const rDisplay  = regionDisplay(cVal, cCustom);
 
+  // ── EDIT MODE: update an existing static project card ──
+  if(editingProjectSlot){
+    const card = document.querySelector(`.project-card[data-pid="${editingProjectSlot}"]`);
+    if(card){
+      card.querySelector('.project-name').textContent = name;
+      card.querySelector('.project-desc').textContent = document.getElementById('f-desc').value.trim();
+      card.dataset.region = regionKey;
+      const tags = card.querySelectorAll('.project-tag');
+      if(tags[0]) tags[0].textContent = rLabel;
+      if(tags[1]) tags[1].textContent = 'LOD '+document.getElementById('f-lod').value;
+      if(tags[2]) tags[2].textContent = document.getElementById('f-type').value;
+      const metas = card.querySelectorAll('.project-meta-item');
+      const vals  = [document.getElementById('f-area').value.trim(), document.getElementById('f-role').value.trim(),
+                     document.getElementById('f-cde').value.trim(),  document.getElementById('f-duration').value.trim()];
+      metas.forEach((m,i)=>{ const strong=m.querySelector('strong'); if(strong) m.innerHTML=strong.outerHTML+vals[i]; });
+      if(pendingImgData){ const img=card.querySelector('.img-wrap img'); if(img){img.src=pendingImgData;img.style.display='';} }
+      const override = { name, desc:document.getElementById('f-desc').value.trim(),
+        regionLabel:rLabel, region:regionKey,
+        lod:document.getElementById('f-lod').value, type:document.getElementById('f-type').value,
+        area:vals[0], role:vals[1], cde:vals[2], duration:vals[3],
+        img: pendingImgData||undefined };
+      const s=getStore(); s['proj-override-'+editingProjectSlot]=override; setStore(s);
+    }
+    editingProjectSlot = null;
+    backdrop.classList.remove('open');
+    return;
+  }
+
+  // ── ADD MODE: create a brand new project card ──
   const p = {
     id:          Date.now(),
     region:      regionKey,
     regionLabel: rLabel,
-    name:        name,
+    name,
     type:        document.getElementById('f-type').value,
     lod:         document.getElementById('f-lod').value,
     desc:        document.getElementById('f-desc').value.trim(),
@@ -1328,17 +1663,14 @@ btnSubmit.addEventListener('click', ()=>{
 
   const card = buildProjectCard(p, true);
   grid.appendChild(card);
-  fadeObs.observe(card); // animate in
+  fadeObs.observe(card);
 
-  // Save image separately if present (store key = custom-{id})
   const s = getStore();
   s.customProjects = [...(s.customProjects||[]), p];
   if(pendingImgData) s['custom-'+p.id] = pendingImgData;
   setStore(s);
 
-  // Add dynamic filter button if needed
   addFilterBtn(regionKey, rDisplay);
-
   backdrop.classList.remove('open');
 });
 
@@ -1477,6 +1809,341 @@ certSubmit?.addEventListener('click',()=>{
     fi.addEventListener('change',()=>{ const file=fi.files[0]; if(!file) return; const r=new FileReader(); r.onload=ev=>{ let img=wrap.querySelector('img'); if(!img){img=document.createElement('img');img.style.cssText='width:100%;height:100%;object-fit:contain;padding:1.5rem;display:block';wrap.prepend(img);} img.src=ev.target.result; wrap.querySelector('.cert-badge-placeholder')?.remove(); const ss=getStore(); ss[wrap.dataset.slot]=ev.target.result; setStore(ss); }; r.readAsDataURL(file); });
   });
 })();
+
+/* ══════════════════════════════════════════════════════
+   EDITABLE PROJECT CARDS — PENCIL BUTTON
+   ══════════════════════════════════════════════════════ */
+function wireProjectEditBtn(card){
+  if(card.querySelector('.card-edit-btn')) return;
+  const slot = card.querySelector('.img-wrap')?.dataset.slot;
+  if(!slot) return;
+  card.dataset.pid = slot;
+  const btn = document.createElement('button');
+  btn.className='card-edit-btn'; btn.title='Edit project';
+  btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  btn.addEventListener('click', e=>{ e.stopPropagation(); openProjectEditModal(card); });
+  card.querySelector('.img-wrap').appendChild(btn);
+}
+// Wire all existing static cards
+document.querySelectorAll('.project-card').forEach(wireProjectEditBtn);
+
+function openProjectEditModal(card){
+  const slot = card.dataset.pid;
+  editingProjectSlot = slot;
+  const name = card.querySelector('.project-name')?.textContent||'';
+  const desc = card.querySelector('.project-desc')?.textContent||'';
+  const tags = card.querySelectorAll('.project-tag');
+  const type = tags[2]?.textContent||'Hospitality';
+  const lodText = (tags[1]?.textContent||'LOD 300').replace('LOD ','').trim();
+  const region = card.dataset.region||'';
+  const metas = card.querySelectorAll('.project-meta-item');
+  function metaVal(el){ const s=el.querySelector('strong'); return el.textContent.replace(s?.textContent||'','').trim(); }
+  const area=(metas[0]&&metaVal(metas[0]))||''; const role=(metas[1]&&metaVal(metas[1]))||'';
+  const cde=(metas[2]&&metaVal(metas[2]))||'';  const dur=(metas[3]&&metaVal(metas[3]))||'';
+
+  resetForm();
+  document.getElementById('f-name').value=name;
+  document.getElementById('f-desc').value=desc;
+  document.getElementById('f-area').value=area;
+  document.getElementById('f-role').value=role;
+  document.getElementById('f-cde').value=cde;
+  document.getElementById('f-duration').value=dur;
+  const cSel=document.getElementById('f-country');
+  if(['ksa','uae','uk','usa','canada','india','europe'].includes(region)) cSel.value=region;
+  const tSel=document.getElementById('f-type');
+  for(let i=0;i<tSel.options.length;i++) if(tSel.options[i].text===type){tSel.selectedIndex=i;break;}
+  const lSel=document.getElementById('f-lod');
+  for(let i=0;i<lSel.options.length;i++) if(lSel.options[i].value===lodText||lSel.options[i].text.includes(lodText)){lSel.selectedIndex=i;break;}
+
+  setProjectModalMode('edit');
+  document.getElementById('modalBackdrop').classList.add('open');
+}
+
+// Apply saved overrides to static project cards on load
+(()=>{
+  const s=getStore();
+  document.querySelectorAll('.project-card[data-pid]').forEach(card=>{
+    const ov=s['proj-override-'+card.dataset.pid]; if(!ov) return;
+    card.querySelector('.project-name').textContent=ov.name||'';
+    card.querySelector('.project-desc').textContent=ov.desc||'';
+    card.dataset.region=ov.region||card.dataset.region;
+    const tags=card.querySelectorAll('.project-tag');
+    if(tags[0]) tags[0].textContent=ov.regionLabel||tags[0].textContent;
+    if(tags[1]) tags[1].textContent='LOD '+(ov.lod||'300');
+    if(tags[2]) tags[2].textContent=ov.type||tags[2].textContent;
+    const metas=card.querySelectorAll('.project-meta-item');
+    const vals=[ov.area,ov.role,ov.cde,ov.duration];
+    metas.forEach((m,i)=>{ const st=m.querySelector('strong'); if(st&&vals[i]!=null) m.innerHTML=st.outerHTML+vals[i]; });
+    if(ov.img){ const img=card.querySelector('.img-wrap img'); if(img){img.src=ov.img;img.style.display='';} }
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   EDITABLE TECH CARDS — SKILL MODAL
+   ══════════════════════════════════════════════════════ */
+let editingTechId = null;
+const skillBackdrop = document.getElementById('skillModalBackdrop');
+const skillBtnCancel = document.getElementById('skillBtnCancel');
+const skillBtnSubmit = document.getElementById('skillBtnSubmit');
+document.getElementById('skillModalClose').addEventListener('click',()=>skillBackdrop.classList.remove('open'));
+skillBtnCancel.addEventListener('click',()=>skillBackdrop.classList.remove('open'));
+skillBackdrop.addEventListener('click',e=>{ if(e.target===skillBackdrop) skillBackdrop.classList.remove('open'); });
+
+// Assign data-tid to each static tech card
+document.querySelectorAll('.tech-card').forEach(card=>{
+  const slot=card.querySelector('.media-wrap')?.dataset.slot;
+  if(slot) card.dataset.tid=slot;
+});
+
+function buildSkillCard(sk, tabId){
+  const card=document.createElement('div');
+  card.className='tech-card fade-in'; card.dataset.tid='sk-'+sk.id; card.dataset.skillId=sk.id; card.dataset.skillTab=tabId;
+  card.innerHTML=`
+    <div class="media-wrap empty" data-slot="sk-${sk.id}">
+      <div class="media-placeholder-inner"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Add Image / Video</span></div>
+      <div class="upload-overlay" style="opacity:0"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>Upload</span></div>
+      <input type="file" accept="image/*,video/*" class="file-input">
+    </div>
+    <div class="tech-card-body">
+      <h4 class="tech-card-title">${sk.title||'Skill Title'}</h4>
+      <p class="tech-card-desc">${sk.desc||''}</p>
+    </div>`;
+  // wire delete in edit mode
+  const delBtn=document.createElement('button');
+  delBtn.className='delete-btn'; delBtn.title='Remove skill'; delBtn.textContent='×';
+  delBtn.addEventListener('click',e=>{ e.stopPropagation();
+    if(confirm('Remove this skill card?')){ card.remove(); const s=getStore(); s.customSkills=(s.customSkills||[]).filter(x=>x.id!==sk.id); setStore(s); }
+  });
+  card.querySelector('.media-wrap').appendChild(delBtn);
+  // wire edit btn
+  wireTechEditBtn(card);
+  // wire media upload
+  setupMediaUpload(card.querySelector('.media-wrap'));
+  return card;
+}
+
+function wireTechEditBtn(card){
+  if(card.querySelector('.card-edit-btn')) return;
+  const btn=document.createElement('button');
+  btn.className='card-edit-btn'; btn.title='Edit card';
+  btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  btn.addEventListener('click',e=>{ e.stopPropagation(); openSkillModal('edit', card); });
+  const wrap=card.querySelector('.media-wrap'); if(wrap) wrap.appendChild(btn);
+}
+document.querySelectorAll('.tech-card').forEach(wireTechEditBtn);
+
+// Add Skill buttons
+document.querySelectorAll('.btn-add-skill').forEach(btn=>{
+  btn.addEventListener('click',()=>openSkillModal('add', null, btn.dataset.tab));
+});
+
+function openSkillModal(mode, card, tabHint){
+  editingTechId = mode==='edit' ? card?.dataset.tid : null;
+  document.getElementById('skillModalTitle').textContent = mode==='edit' ? 'Edit Skill Card' : 'Add Skill Card';
+  document.getElementById('skillBtnSubmit').textContent  = mode==='edit' ? 'Save Changes' : 'Add Skill Card';
+  document.getElementById('skillTabRow').style.display   = mode==='edit' ? 'none' : '';
+  if(mode==='edit' && card){
+    document.getElementById('sf-title').value = card.querySelector('.tech-card-title')?.textContent||'';
+    document.getElementById('sf-desc').value  = card.querySelector('.tech-card-desc')?.textContent||'';
+  } else {
+    document.getElementById('sf-title').value=''; document.getElementById('sf-desc').value='';
+    if(tabHint) document.getElementById('sf-tab').value=tabHint;
+  }
+  skillBackdrop.classList.add('open');
+}
+
+skillBtnSubmit.addEventListener('click',()=>{
+  const title=document.getElementById('sf-title').value.trim();
+  const desc=document.getElementById('sf-desc').value.trim();
+  if(!title){ alert('Please enter a title.'); return; }
+
+  if(editingTechId){
+    // Edit existing card
+    const card=document.querySelector(`.tech-card[data-tid="${editingTechId}"]`);
+    if(card){
+      card.querySelector('.tech-card-title').textContent=title;
+      card.querySelector('.tech-card-desc').textContent=desc;
+      const s=getStore(); s['techcard-override-'+editingTechId]={title,desc}; setStore(s);
+    }
+  } else {
+    // Add new skill card
+    const tabId=document.getElementById('sf-tab').value;
+    const sk={id:Date.now(), title, desc};
+    const panel=document.getElementById('panel-'+tabId);
+    if(panel){
+      const card=buildSkillCard(sk, tabId);
+      panel.querySelector('.tech-grid').appendChild(card);
+      fadeObs.observe(card);
+    }
+    const s=getStore(); s.customSkills=[...(s.customSkills||[]),{...sk,tab:tabId}]; setStore(s);
+  }
+  skillBackdrop.classList.remove('open');
+});
+
+// Restore tech card overrides on load
+(()=>{
+  const s=getStore();
+  document.querySelectorAll('.tech-card[data-tid]').forEach(card=>{
+    const ov=s['techcard-override-'+card.dataset.tid]; if(!ov) return;
+    const t=card.querySelector('.tech-card-title'); const d=card.querySelector('.tech-card-desc');
+    if(t) t.textContent=ov.title; if(d) d.textContent=ov.desc;
+  });
+  // Restore custom skill cards
+  (s.customSkills||[]).forEach(sk=>{
+    const panel=document.getElementById('panel-'+sk.tab); if(!panel) return;
+    const card=buildSkillCard(sk, sk.tab);
+    panel.querySelector('.tech-grid').appendChild(card);
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   WORK EXPERIENCE — ADD / EDIT / DELETE
+   ══════════════════════════════════════════════════════ */
+let editingExpEid = null;
+const expBackdrop=document.getElementById('expModalBackdrop');
+const expBtnCancel=document.getElementById('expBtnCancel');
+const expBtnSubmit=document.getElementById('expBtnSubmit');
+document.getElementById('expModalClose').addEventListener('click',()=>expBackdrop.classList.remove('open'));
+expBtnCancel.addEventListener('click',()=>expBackdrop.classList.remove('open'));
+expBackdrop.addEventListener('click',e=>{ if(e.target===expBackdrop) expBackdrop.classList.remove('open'); });
+
+function addRoleRow(title='', meta=''){
+  const row=document.createElement('div'); row.className='role-entry';
+  row.innerHTML=`<div class="form-group"><label>Role Title</label><input type="text" class="role-title" placeholder="e.g. BIM Manager" value="${title.replace(/"/g,'&quot;')}"></div><div class="form-group"><label>Dates &amp; Location</label><input type="text" class="role-meta" placeholder="e.g. Jan 2023 – Present · Riyadh" value="${meta.replace(/"/g,'&quot;')}"></div><button type="button" class="role-entry-del"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  row.querySelector('.role-entry-del').addEventListener('click',()=>{ if(document.getElementById('rolesList').children.length>1) row.remove(); else alert('At least one role is required.'); });
+  document.getElementById('rolesList').appendChild(row);
+}
+document.getElementById('btnAddRole').addEventListener('click',()=>addRoleRow());
+
+function openExpModal(mode, eid){
+  editingExpEid = mode==='edit' ? eid : null;
+  document.getElementById('expModalTitle').textContent = mode==='edit' ? 'Edit Work Experience' : 'Add Work Experience';
+  document.getElementById('expBtnSubmit').textContent  = mode==='edit' ? 'Save Changes' : 'Add Experience';
+  document.getElementById('rolesList').innerHTML='';
+  if(mode==='edit'){
+    const item=document.querySelector(`.timeline-item[data-eid="${eid}"]`);
+    document.getElementById('ef-company').value=item?.querySelector('.timeline-company')?.textContent||'';
+    document.getElementById('ef-badge').value=item?.querySelector('.timeline-badge')?.textContent||'';
+    item?.querySelectorAll('.timeline-role').forEach(r=>{
+      addRoleRow(r.querySelector('.timeline-role-title')?.textContent||'', r.querySelector('.timeline-role-meta')?.textContent||'');
+    });
+    if(!document.getElementById('rolesList').children.length) addRoleRow();
+  } else {
+    document.getElementById('ef-company').value=''; document.getElementById('ef-badge').value='';
+    addRoleRow();
+  }
+  expBackdrop.classList.add('open');
+}
+
+function buildTimelineItem(data, eid){
+  const item=document.createElement('div'); item.className='timeline-item fade-in'; item.dataset.eid=eid;
+  const rolesHtml=data.roles.map(r=>`<div class="timeline-role"><div class="timeline-role-title">${r.title}</div><div class="timeline-role-meta">${r.meta}</div></div>`).join('');
+  item.innerHTML=`<div class="timeline-company">${data.company}</div><span class="timeline-badge">${data.badge}</span><div class="timeline-roles">${rolesHtml}</div><div class="timeline-edit-controls"></div>`;
+  wireTimelineEditControls(item);
+  return item;
+}
+
+function wireTimelineEditControls(item){
+  let ctrl=item.querySelector('.timeline-edit-controls');
+  if(!ctrl){ ctrl=document.createElement('div'); ctrl.className='timeline-edit-controls'; item.appendChild(ctrl); }
+  if(ctrl.querySelector('.btn-tl-edit')) return;
+  const editBtn=document.createElement('button'); editBtn.className='btn-tl-edit';
+  editBtn.innerHTML='<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit';
+  editBtn.addEventListener('click',()=>openExpModal('edit', item.dataset.eid));
+  const delBtn=document.createElement('button'); delBtn.className='btn-tl-del';
+  delBtn.innerHTML='<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>Delete';
+  delBtn.addEventListener('click',()=>{
+    if(!confirm('Remove this experience entry?')) return;
+    const eid=item.dataset.eid;
+    item.remove();
+    const s=getStore();
+    if(eid.startsWith('eid')){ s['exp-deleted-'+eid]=true; delete s['exp-override-'+eid]; }
+    else s.customExp=(s.customExp||[]).filter(x=>String(x.id)!==eid);
+    setStore(s);
+  });
+  ctrl.appendChild(editBtn); ctrl.appendChild(delBtn);
+}
+// Wire all static timeline items
+document.querySelectorAll('.timeline-item[data-eid]').forEach(wireTimelineEditControls);
+
+// Add Experience button
+document.getElementById('btnAddExp').addEventListener('click',()=>openExpModal('add'));
+
+expBtnSubmit.addEventListener('click',()=>{
+  const company=document.getElementById('ef-company').value.trim();
+  const badge=document.getElementById('ef-badge').value.trim();
+  if(!company){ alert('Please enter a company name.'); return; }
+  const roles=[...document.getElementById('rolesList').querySelectorAll('.role-entry')].map(r=>({
+    title:r.querySelector('.role-title').value.trim(),
+    meta:r.querySelector('.role-meta').value.trim()
+  })).filter(r=>r.title);
+  if(!roles.length){ alert('Please add at least one role.'); return; }
+
+  if(editingExpEid){
+    // Update existing item
+    const item=document.querySelector(`.timeline-item[data-eid="${editingExpEid}"]`);
+    if(item){
+      item.querySelector('.timeline-company').textContent=company;
+      item.querySelector('.timeline-badge').textContent=badge;
+      const rolesDiv=item.querySelector('.timeline-roles');
+      rolesDiv.innerHTML=roles.map(r=>`<div class="timeline-role"><div class="timeline-role-title">${r.title}</div><div class="timeline-role-meta">${r.meta}</div></div>`).join('');
+      const s=getStore(); s['exp-override-'+editingExpEid]={company,badge,roles}; setStore(s);
+    }
+  } else {
+    const id=Date.now();
+    const eid=String(id);
+    const item=buildTimelineItem({company,badge,roles},eid);
+    document.querySelector('.timeline').appendChild(item);
+    fadeObs.observe(item);
+    const s=getStore(); s.customExp=[...(s.customExp||[]),{id,company,badge,roles}]; setStore(s);
+  }
+  expBackdrop.classList.remove('open');
+});
+
+// Restore experience overrides and custom entries on load
+(()=>{
+  const s=getStore();
+  // Apply overrides to static items; hide deleted ones
+  document.querySelectorAll('.timeline-item[data-eid]').forEach(item=>{
+    const eid=item.dataset.eid;
+    if(s['exp-deleted-'+eid]){ item.style.display='none'; return; }
+    const ov=s['exp-override-'+eid]; if(!ov) return;
+    item.querySelector('.timeline-company').textContent=ov.company;
+    item.querySelector('.timeline-badge').textContent=ov.badge;
+    const rolesDiv=item.querySelector('.timeline-roles');
+    rolesDiv.innerHTML=ov.roles.map(r=>`<div class="timeline-role"><div class="timeline-role-title">${r.title}</div><div class="timeline-role-meta">${r.meta}</div></div>`).join('');
+  });
+  // Append custom experience entries
+  (s.customExp||[]).forEach(e=>{
+    const item=buildTimelineItem(e, String(e.id));
+    document.querySelector('.timeline').appendChild(item);
+  });
+})();
+
+// Helper: wire media upload for dynamically created tech cards
+function setupMediaUpload(wrap){
+  if(!wrap) return;
+  const ov=wrap.querySelector('.upload-overlay');
+  const fi=wrap.querySelector('.file-input');
+  if(!ov||!fi) return;
+  ov.addEventListener('click',e=>{ e.stopPropagation(); fi.click(); });
+  fi.addEventListener('change',()=>{
+    const file=fi.files[0]; if(!file) return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      const data=ev.target.result;
+      let el=wrap.querySelector('img,video');
+      if(file.type.startsWith('video/')){
+        if(!el||el.tagName!=='VIDEO'){ el=document.createElement('video'); el.autoplay=true; el.loop=true; el.muted=true; el.playsInline=true; el.style.cssText='width:100%;height:100%;object-fit:cover;display:block'; wrap.prepend(el); }
+      } else {
+        if(!el||el.tagName!=='IMG'){ el=document.createElement('img'); el.style.cssText='width:100%;height:100%;object-fit:cover;display:block'; wrap.prepend(el); }
+      }
+      el.src=data; wrap.classList.remove('empty'); wrap.querySelector('.media-placeholder-inner')?.remove();
+      const s=getStore(); s[wrap.dataset.slot]=data; setStore(s);
+    };
+    r.readAsDataURL(file); fi.value='';
+  });
+}
 
 function resetCertForm(){
   ['cf-name','cf-issuer','cf-date','cf-id','cf-desc'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });

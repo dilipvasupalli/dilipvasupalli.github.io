@@ -1349,36 +1349,37 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
 
   /* ── Apply a fetched state into localStorage (overwrite) ── */
   function applyState(state){
-    if(!state?.version) return false;
+    if(!state?.version) return;
     const s = getStore();
-    let dirty = false;
-    const merge = (prefix, obj) => {
+    const put = (prefix, obj) => {
       if(!obj) return;
-      Object.entries(obj).forEach(([k,v])=>{ s[prefix+k]=v; dirty=true; });
+      Object.entries(obj).forEach(([k,v])=>{ s[prefix+k]=v; });
     };
-    merge('text-',           state.textOverrides);
-    merge('proj-override-',  state.projectOverrides);
-    merge('techcard-override-', state.techCardOverrides);
-    merge('exp-override-',   state.expOverrides);
-    if(state.expDeleted?.length){ state.expDeleted.forEach(e=>{ s['exp-deleted-'+e]=true; dirty=true; }); }
-    if(state.customProjects?.length && !s.customProjects?.length){ s.customProjects=state.customProjects; dirty=true; }
-    if(state.customSkills?.length   && !s.customSkills?.length)  { s.customSkills=state.customSkills;     dirty=true; }
-    if(state.customExp?.length      && !s.customExp?.length)     { s.customExp=state.customExp;           dirty=true; }
-    if(state.customCerts?.length    && !s.customCerts?.length)   { s.customCerts=state.customCerts;       dirty=true; }
-    if(dirty) setStore(s);
-    return dirty;
+    put('text-',              state.textOverrides);
+    put('proj-override-',     state.projectOverrides);
+    put('techcard-override-', state.techCardOverrides);
+    put('exp-override-',      state.expOverrides);
+    if(state.expDeleted?.length) state.expDeleted.forEach(e=>{ s['exp-deleted-'+e]=true; });
+    // Remote is always source of truth — unconditionally overwrite custom items
+    if(state.customProjects) s.customProjects = state.customProjects;
+    if(state.customSkills)   s.customSkills   = state.customSkills;
+    if(state.customExp)      s.customExp      = state.customExp;
+    if(state.customCerts)    s.customCerts    = state.customCerts;
+    setStore(s);
   }
 
   /* ── Fetch portfolio-data.json on fresh session load ── */
   async function fetchRemote(){
     if(sessionStorage.getItem(GH_FETCHED)) return; // already done this session
-    sessionStorage.setItem(GH_FETCHED,'1');
     try{
       const r = await fetch('portfolio-data.json?_='+Date.now(),{cache:'no-store'});
-      if(!r.ok) return;
+      if(!r.ok) return; // don't set flag — allow retry on next open
       const data = await r.json();
-      if(applyState(data)) location.reload(); // re-render with fresh data
-    }catch{}
+      if(!data?.version) return;
+      sessionStorage.setItem(GH_FETCHED,'1'); // set AFTER successful fetch
+      applyState(data);
+      location.reload(); // always reload to re-render with remote data
+    }catch{} // network error — don't set flag, will retry next session
   }
   fetchRemote();
 

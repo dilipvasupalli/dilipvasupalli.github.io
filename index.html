@@ -1345,11 +1345,21 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     if(Object.keys(tech).length)  state.techCardOverrides= tech;
     if(Object.keys(expOv).length) state.expOverrides     = expOv;
     if(expDel.length)             state.expDeleted       = expDel;
-    // Custom entries (strip heavy base64 images to keep file small)
-    if(s.customProjects?.length)  state.customProjects   = s.customProjects.map(({imgData,...r})=>r);
+    // Custom entries — include imgData (compressed at upload time, so safe to store)
+    if(s.customProjects?.length)  state.customProjects   = s.customProjects;
     if(s.customSkills?.length)    state.customSkills     = s.customSkills;
     if(s.customExp?.length)       state.customExp        = s.customExp;
-    if(s.customCerts?.length)     state.customCerts      = s.customCerts.map(({imgData,...r})=>r);
+    if(s.customCerts?.length)     state.customCerts      = s.customCerts;
+    // All other image/video slot data (slot keys like 'capella', 'custom-123', etc.)
+    const imgSlots = {};
+    const skipKeys = new Set(['customProjects','customSkills','customExp','customCerts']);
+    for(const [k,v] of Object.entries(s)){
+      if(skipKeys.has(k) || k.startsWith('__') || k.startsWith('text-') ||
+         k.startsWith('proj-override-') || k.startsWith('techcard-override-') ||
+         k.startsWith('exp-override-') || k.startsWith('exp-deleted-')) continue;
+      if(typeof v === 'string' && v.startsWith('data:')) imgSlots[k] = v;
+    }
+    if(Object.keys(imgSlots).length) state.imageSlots = imgSlots;
     return state;
   }
 
@@ -1366,11 +1376,15 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     put('techcard-override-', state.techCardOverrides);
     put('exp-override-',      state.expOverrides);
     if(state.expDeleted?.length) state.expDeleted.forEach(e=>{ s['exp-deleted-'+e]=true; });
-    // Remote is always source of truth — unconditionally overwrite custom items
+    // Custom items — remote is source of truth
     if(state.customProjects) s.customProjects = state.customProjects;
     if(state.customSkills)   s.customSkills   = state.customSkills;
     if(state.customExp)      s.customExp      = state.customExp;
     if(state.customCerts)    s.customCerts    = state.customCerts;
+    // Image/video slot data (cross-device image sync)
+    if(state.imageSlots) Object.entries(state.imageSlots).forEach(([k,v])=>{ s[k]=v; });
+    // Record when this remote snapshot was created so we can skip re-fetching same data
+    if(state.savedAt) s.__ghSyncedAt = state.savedAt;
     setStore(s);
   }
 
@@ -1380,12 +1394,22 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     const toast = document.getElementById('syncToast');
     const toastMsg = document.getElementById('syncToastMsg');
     try{
-      if(toast){ toastMsg.textContent='Loading saved changes…'; toast.classList.add('show'); }
+      if(toast){ toastMsg.textContent='Checking for saved changes…'; toast.classList.add('show'); }
       const r = await fetch('portfolio-data.json?_='+Date.now(),{cache:'no-store'});
       if(!r.ok){ if(toast) toast.classList.remove('show'); return; }
       const data = await r.json();
       if(!data?.version){ if(toast) toast.classList.remove('show'); return; }
-      sessionStorage.setItem(GH_FETCHED,'1'); // set AFTER successful fetch
+      sessionStorage.setItem(GH_FETCHED,'1'); // mark done for this session
+      // ── Timestamp guard ──
+      // Only apply remote data if it's actually newer than what we last saved from here.
+      // This prevents overwriting unsaved local edits when the user just refreshes.
+      const localSyncedAt  = getStore().__ghSyncedAt || 0;
+      const remoteSavedAt  = data.savedAt || 0;
+      if(remoteSavedAt && remoteSavedAt <= localSyncedAt){
+        // Already have this snapshot (or a newer one) in localStorage — nothing to do
+        if(toast) toast.classList.remove('show');
+        return;
+      }
       applyState(data);
       // Re-render in place — no page reload needed
       if(typeof rehydrateFromStore==='function') rehydrateFromStore();
@@ -1420,11 +1444,16 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       const getRes = await fetch(apiUrl,{headers});
       if(getRes.ok){ const f=await getRes.json(); sha=f.sha; }
 
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(buildState(),null,2))));
+      const ts = Date.now();
+      const stateObj = buildState();
+      stateObj.savedAt = ts; // stamp save time so fetchRemote() can compare
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(stateObj,null,2))));
       const body = { message:`Portfolio update ${new Date().toISOString().slice(0,10)}`, content, branch, ...(sha?{sha}:{}) };
       const putRes = await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify(body)});
       if(!putRes.ok){ const e=await putRes.json(); throw new Error(e.message||'Unknown error'); }
 
+      // Record the timestamp locally — fetchRemote() will skip this exact version on reload
+      const s2=getStore(); s2.__ghSyncedAt=ts; setStore(s2);
       btn.textContent='✓ Saved!';
       setTimeout(()=>{ btn.textContent=orig; btn.disabled=false; },2800);
     }catch(e){
@@ -1644,6 +1673,27 @@ document.querySelectorAll('.tech-tab').forEach(tab=>{
 });
 
 /* ══════════════════════════════════════
+   IMAGE COMPRESSION — reduces before storing so cross-device JSON stays small
+   ══════════════════════════════════════ */
+function compressImage(dataUrl){
+  return new Promise(resolve=>{
+    if(!dataUrl||!dataUrl.startsWith('data:image')) return resolve(dataUrl);
+    const img = new Image();
+    img.onload = ()=>{
+      const MAX = 900; // max 900px wide
+      const scale = img.width > MAX ? MAX/img.width : 1;
+      const canvas = document.createElement('canvas');
+      canvas.width  = Math.round(img.width  * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.78));
+    };
+    img.onerror = ()=> resolve(dataUrl); // fallback to original if conversion fails
+    img.src = dataUrl;
+  });
+}
+
+/* ══════════════════════════════════════
    CLICK-TO-UPLOAD (images + videos)
    ══════════════════════════════════════ */
 function setupUpload(wrap){
@@ -1663,11 +1713,11 @@ function setupUpload(wrap){
     if(!file) return;
     const slot = wrap.dataset.slot;
     const reader = new FileReader();
-    reader.onload = ev=>{
-      const data = ev.target.result;
+    reader.onload = async ev=>{
+      const raw = ev.target.result;
+      const data = file.type.startsWith('video/') ? raw : await compressImage(raw);
       // Render
       if(file.type.startsWith('video/')){
-        // Replace with video element
         let vid = wrap.querySelector('video');
         if(!vid){ vid=document.createElement('video'); vid.controls=true; vid.style.cssText='width:100%;height:100%;object-fit:cover;display:block;'; wrap.prepend(vid); }
         wrap.querySelector('img')?.remove();
@@ -1682,7 +1732,7 @@ function setupUpload(wrap){
         wrap.classList.remove('empty');
         wrap.querySelector('.media-placeholder-inner')?.remove();
       }
-      // Persist
+      // Persist (compressed)
       const s = getStore(); s[slot]=data; setStore(s);
     };
     reader.readAsDataURL(file);
@@ -1746,7 +1796,11 @@ backdrop.addEventListener('click', e=>{ if(e.target===backdrop) backdrop.classLi
 document.getElementById('modalImgFile').addEventListener('change', e=>{
   const file=e.target.files[0]; if(!file) return;
   const r=new FileReader();
-  r.onload=ev=>{ pendingImgData=ev.target.result; document.getElementById('modalImgPreview').src=ev.target.result; document.getElementById('modalImgUpload').classList.add('has-image'); };
+  r.onload=async ev=>{
+    pendingImgData = await compressImage(ev.target.result);
+    document.getElementById('modalImgPreview').src=pendingImgData;
+    document.getElementById('modalImgUpload').classList.add('has-image');
+  };
   r.readAsDataURL(file);
 });
 
@@ -1960,7 +2014,11 @@ certBackdrop?.addEventListener('click',e=>{ if(e.target===certBackdrop) certBack
 document.getElementById('certImgFile')?.addEventListener('change',e=>{
   const file=e.target.files[0]; if(!file) return;
   const r=new FileReader();
-  r.onload=ev=>{ pendingCertImg=ev.target.result; document.getElementById('certImgPreview').src=ev.target.result; document.getElementById('certImgUpload').classList.add('has-image'); };
+  r.onload=async ev=>{
+    pendingCertImg = await compressImage(ev.target.result);
+    document.getElementById('certImgPreview').src=pendingCertImg;
+    document.getElementById('certImgUpload').classList.add('has-image');
+  };
   r.readAsDataURL(file);
 });
 
@@ -2378,8 +2436,9 @@ function setupMediaUpload(wrap){
   fi.addEventListener('change',()=>{
     const file=fi.files[0]; if(!file) return;
     const r=new FileReader();
-    r.onload=ev=>{
-      const data=ev.target.result;
+    r.onload=async ev=>{
+      const raw=ev.target.result;
+      const data = file.type.startsWith('video/') ? raw : await compressImage(raw);
       let el=wrap.querySelector('img,video');
       if(file.type.startsWith('video/')){
         if(!el||el.tagName!=='VIDEO'){ el=document.createElement('video'); el.autoplay=true; el.loop=true; el.muted=true; el.playsInline=true; el.style.cssText='width:100%;height:100%;object-fit:cover;display:block'; wrap.prepend(el); }

@@ -346,12 +346,6 @@
       "title": "MEP Service Openings",
       "desc": "Create openings on walls for MEP services like Ducts, Pipes, cable trays etc. with Revit links.",
       "tab": "clash"
-    },
-    {
-      "id": 1779027242459,
-      "title": "Wall Openings for MEP Services",
-      "desc": "Create openings on walls for MEP services like Ducts, Pipes, cable trays etc. with Revit links.",
-      "tab": "cat-1779027022591"
     }
   ],
   "customCerts": [
@@ -408,13 +402,6 @@
     "5D Cost & Quantity Takeoff",
     "RevitAPI & NavisworksAPI"
   ],
-  "customTechCategories": [
-    {
-      "id": "cat-1779027022591",
-      "name": "Revit API Automation",
-      "intro": ""
-    }
-  ],
   "staticCertOverrides": {
     "placeholder-1": {
       "issuer": "Autodesk",
@@ -438,22 +425,22 @@
       "name": "Suji Sugathan",
       "designation": "Senior BIM Manager",
       "company": "DSA Architects International",
-      "review": "--"
+      "review": "Dilip consistently demonstrated strong BIM coordination and problem-solving capabilities throughout the project lifecycle. His attention to detail, proactive communication, and ability to manage multidisciplinary coordination tasks added significant value to the team and project delivery"
     },
     {
       "id": 1779018154916,
       "name": "Naga Uddandam",
       "designation": "BIM Lead",
       "company": "Mapa Group",
-      "review": "--"
+      "review": "I had the opportunity to work closely with Dilip on complex BIM deliverables, where he showed excellent technical knowledge in Revit, Navisworks, and model coordination workflows. He is reliable, collaborative, and always committed to maintaining high BIM standards."
     },
     {
       "id": 1779018190427,
       "name": "Nived Puthussery",
       "designation": "BIM Manager",
       "company": "DSA Architects International",
-      "review": "--"
+      "review": "Dilip is a dedicated BIM professional with a strong understanding of project requirements and digital construction workflows. His ability to coordinate with multiple stakeholders and deliver tasks efficiently makes him a valuable asset to any BIM team."
     }
   ],
-  "savedAt": 1779027719037
+  "savedAt": 1779038158948
 }

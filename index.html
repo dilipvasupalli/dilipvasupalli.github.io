@@ -1472,10 +1472,12 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       const skipKeys = new Set(['customProjects','customSkills','customExp','customCerts']);
 
       // (a) standalone image slots (hero, profile pic, project media, etc.)
+      // Exclude custom-* and cert-custom-* — those are handled by scans (c) and (d)
       for(const [k,v] of Object.entries(s)){
         if(skipKeys.has(k)||k.startsWith('__')||k.startsWith('text-')||
            k.startsWith('proj-override-')||k.startsWith('techcard-override-')||
-           k.startsWith('exp-override-')||k.startsWith('exp-deleted-')) continue;
+           k.startsWith('exp-override-')||k.startsWith('exp-deleted-')||
+           k.startsWith('custom-')||k.startsWith('cert-custom-')) continue;
         if(typeof v==='string' && v.startsWith('data:image'))
           uploads.push({type:'slot', key:k, value:v,
             path:'portfolio-images/'+k.replace(/[^a-zA-Z0-9_-]/g,'_')+'.jpg'});

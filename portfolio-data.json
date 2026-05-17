@@ -118,6 +118,20 @@
       "cde": "ACC",
       "duration": "3 Months (Present)",
       "imgData": "portfolio-images/cp_1778997787585.jpg"
+    },
+    {
+      "id": 1779009524658,
+      "region": "ksa",
+      "regionLabel": "🇸🇦 KSA",
+      "name": "Qiddiya Wadi Hotel",
+      "type": "Hospitality",
+      "lod": "LOD 500",
+      "desc": "",
+      "area": "5,293 Sq.m",
+      "role": "BIM Manager",
+      "cde": "ACC",
+      "duration": "3 Months",
+      "imgData": "portfolio-images/cp_1779009524658.jpg"
     }
   ],
   "imageSlots": {
@@ -137,7 +151,8 @@
     "custom-1778860502340": "portfolio-images/custom-1778860502340.jpg",
     "clash-3": "portfolio-images/clash-3.jpg",
     "custom-1778996788107": "portfolio-images/custom-1778996788107.jpg",
-    "custom-1778997787585": "portfolio-images/cp_1778997787585.jpg"
+    "custom-1778997787585": "portfolio-images/cp_1778997787585.jpg",
+    "custom-1779009524658": "portfolio-images/cp_1779009524658.jpg"
   },
-  "savedAt": 1779007674082
+  "savedAt": 1779009558861
 }

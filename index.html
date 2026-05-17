@@ -1328,11 +1328,10 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
   function getGHCfg(){ try{ return JSON.parse(localStorage.getItem(GH_CFG))||{}; }catch{ return{}; } }
   function setGHCfg(c){ try{ localStorage.setItem(GH_CFG, JSON.stringify(c)); }catch{} }
 
-  /* ── Build the state object to commit ── */
-  /* ── Build the full state object to commit to GitHub ──
-     async so it can compress ALL images (including ones uploaded before
-     compression was added) before writing them into the JSON            */
-  async function buildState(){
+  /* ── Build the state object to commit to GitHub ──
+     Images are stored as relative URL paths (portfolio-images/xxx.jpg)
+     after saveToGitHub() uploads them — so no base64 here, JSON stays small. */
+  function buildState(){
     const s = getStore();
     const state = { version:2 };
     const txt={}, proj={}, tech={}, expOv={}, expDel=[];
@@ -1343,46 +1342,24 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       if(k.startsWith('exp-override-'))     expOv[k.slice(13)] = v;
       if(k.startsWith('exp-deleted-') && v) expDel.push(k.slice(12));
     }
-    if(Object.keys(txt).length) state.textOverrides = txt;
-
-    // Compress images inside proj-override objects (may be large if uploaded with old code)
-    for(const pid of Object.keys(proj)){
-      if(proj[pid]?.img?.startsWith('data:image'))
-        proj[pid] = { ...proj[pid], img: await compressImage(proj[pid].img) };
-    }
-    if(Object.keys(proj).length)  state.projectOverrides  = proj;
-    if(Object.keys(tech).length)  state.techCardOverrides = tech;
-    if(Object.keys(expOv).length) state.expOverrides      = expOv;
-    if(expDel.length)             state.expDeleted        = expDel;
-
-    // Custom projects — compress imgData on the way out
-    if(s.customProjects?.length){
-      state.customProjects = await Promise.all(s.customProjects.map(async p=>{
-        if(p.imgData?.startsWith('data:image')) return {...p, imgData: await compressImage(p.imgData)};
-        return p;
-      }));
-    }
-    if(s.customSkills?.length)  state.customSkills = s.customSkills;
-    if(s.customExp?.length)     state.customExp    = s.customExp;
-
-    // Custom certs — compress imgData on the way out
-    if(s.customCerts?.length){
-      state.customCerts = await Promise.all(s.customCerts.map(async c=>{
-        if(c.imgData?.startsWith('data:image')) return {...c, imgData: await compressImage(c.imgData)};
-        return c;
-      }));
-    }
-
-    // All remaining image slot keys (e.g. 'capella', 'custom-123', 'cert-custom-456')
-    // Compress each one; skip videos (too large for JSON) and skip non-image data
+    if(Object.keys(txt).length)   state.textOverrides    = txt;
+    if(Object.keys(proj).length)  state.projectOverrides = proj;
+    if(Object.keys(tech).length)  state.techCardOverrides= tech;
+    if(Object.keys(expOv).length) state.expOverrides     = expOv;
+    if(expDel.length)             state.expDeleted       = expDel;
+    if(s.customProjects?.length)  state.customProjects   = s.customProjects;
+    if(s.customSkills?.length)    state.customSkills     = s.customSkills;
+    if(s.customExp?.length)       state.customExp        = s.customExp;
+    if(s.customCerts?.length)     state.customCerts      = s.customCerts;
+    // Image slots — only URL paths survive into JSON (base64 never written here)
     const imgSlots = {};
     const skipKeys = new Set(['customProjects','customSkills','customExp','customCerts']);
     for(const [k,v] of Object.entries(s)){
-      if(skipKeys.has(k) || k.startsWith('__') || k.startsWith('text-') ||
-         k.startsWith('proj-override-') || k.startsWith('techcard-override-') ||
-         k.startsWith('exp-override-')  || k.startsWith('exp-deleted-')) continue;
-      if(typeof v==='string' && v.startsWith('data:image'))
-        imgSlots[k] = await compressImage(v);
+      if(skipKeys.has(k)||k.startsWith('__')||k.startsWith('text-')||
+         k.startsWith('proj-override-')||k.startsWith('techcard-override-')||
+         k.startsWith('exp-override-')||k.startsWith('exp-deleted-')) continue;
+      if(typeof v==='string' && v.startsWith('portfolio-images/'))
+        imgSlots[k] = v;
     }
     if(Object.keys(imgSlots).length) state.imageSlots = imgSlots;
     return state;
@@ -1458,7 +1435,11 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
   }
   fetchRemote();
 
-  /* ── Save to GitHub ── */
+  /* ── Save to GitHub ──
+     Phase 1: each base64 image → separate file in portfolio-images/
+              (replaces base64 in localStorage with the relative URL path)
+     Phase 2: commit portfolio-data.json containing only text + URL paths
+              (tiny file → reliable on every device, no base64 size limit)  */
   async function saveToGitHub(){
     const cfg = getGHCfg();
     if(!cfg.pat||!cfg.repo){
@@ -1472,24 +1453,84 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     try{
       const [owner,repo] = cfg.repo.split('/');
       const branch = cfg.branch||'main';
-      const filePath = cfg.filepath||'portfolio-data.json';
-      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
       const headers = { Authorization:`token ${cfg.pat}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' };
 
-      // Get current SHA so we can update (not create duplicate)
-      let sha;
-      const getRes = await fetch(apiUrl,{headers});
-      if(getRes.ok){ const f=await getRes.json(); sha=f.sha; }
+      /* Helper: create or update a single file on GitHub */
+      async function ghPut(path, b64Content){
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+        let sha;
+        const getR = await fetch(url,{headers});
+        if(getR.ok){ const f=await getR.json(); sha=f.sha; }
+        const body = { message:`Portfolio update ${new Date().toISOString().slice(0,10)}`, content:b64Content, branch, ...(sha?{sha}:{}) };
+        const putR = await fetch(url,{method:'PUT',headers,body:JSON.stringify(body)});
+        if(!putR.ok){ const e=await putR.json(); throw new Error(e.message||'Upload failed for '+path); }
+      }
 
-      btn.textContent='Compressing images…';
+      /* ── Phase 1: upload each base64 image as a separate GitHub file ── */
+      const s = getStore();
+      const uploads = [];
+      const skipKeys = new Set(['customProjects','customSkills','customExp','customCerts']);
+
+      // (a) standalone image slots (hero, profile pic, project media, etc.)
+      for(const [k,v] of Object.entries(s)){
+        if(skipKeys.has(k)||k.startsWith('__')||k.startsWith('text-')||
+           k.startsWith('proj-override-')||k.startsWith('techcard-override-')||
+           k.startsWith('exp-override-')||k.startsWith('exp-deleted-')) continue;
+        if(typeof v==='string' && v.startsWith('data:image'))
+          uploads.push({type:'slot', key:k, value:v,
+            path:'portfolio-images/'+k.replace(/[^a-zA-Z0-9_-]/g,'_')+'.jpg'});
+      }
+      // (b) project override images
+      for(const [k,v] of Object.entries(s)){
+        if(k.startsWith('proj-override-') && v?.img?.startsWith('data:image'))
+          uploads.push({type:'proj', key:k, value:v.img,
+            path:'portfolio-images/proj_'+k.slice(14).replace(/[^a-zA-Z0-9_-]/g,'_')+'.jpg'});
+      }
+      // (c) custom project images
+      (s.customProjects||[]).forEach(p=>{
+        if(p.imgData?.startsWith('data:image'))
+          uploads.push({type:'cp', id:p.id, value:p.imgData,
+            path:'portfolio-images/cp_'+p.id+'.jpg'});
+      });
+      // (d) custom cert images
+      (s.customCerts||[]).forEach(c=>{
+        if(c.imgData?.startsWith('data:image'))
+          uploads.push({type:'cc', id:c.id, value:c.imgData,
+            path:'portfolio-images/cc_'+c.id+'.jpg'});
+      });
+
+      if(uploads.length){
+        let done = 0;
+        btn.textContent = `Uploading images… (0/${uploads.length})`;
+        for(const u of uploads){
+          const compressed = await compressImage(u.value);
+          await ghPut(u.path, compressed.split(',')[1]); // strip data:image/jpeg;base64, prefix
+          // Replace base64 in localStorage with the relative URL
+          if(u.type==='slot'){
+            s[u.key] = u.path;
+          } else if(u.type==='proj'){
+            s[u.key] = {...s[u.key], img: u.path};
+          } else if(u.type==='cp'){
+            const idx = (s.customProjects||[]).findIndex(p=>p.id===u.id);
+            if(idx>=0){ s.customProjects[idx]={...s.customProjects[idx],imgData:u.path}; s['custom-'+u.id]=u.path; }
+          } else if(u.type==='cc'){
+            const idx = (s.customCerts||[]).findIndex(c=>c.id===u.id);
+            if(idx>=0){ s.customCerts[idx]={...s.customCerts[idx],imgData:u.path}; s['cert-custom-'+u.id]=u.path; }
+          }
+          done++;
+          btn.textContent = `Uploading images… (${done}/${uploads.length})`;
+        }
+        setStore(s); // persist URL replacements to localStorage before building JSON
+      }
+
+      /* ── Phase 2: commit portfolio-data.json (images are now URL paths) ── */
+      btn.textContent = 'Saving data…';
+      const filePath = cfg.filepath||'portfolio-data.json';
       const ts = Date.now();
-      const stateObj = await buildState(); // async — compresses all images first
+      const stateObj = buildState(); // synchronous — no base64 left to compress
       stateObj.savedAt = ts;
-      btn.textContent='Uploading…';
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(stateObj,null,2))));
-      const body = { message:`Portfolio update ${new Date().toISOString().slice(0,10)}`, content, branch, ...(sha?{sha}:{}) };
-      const putRes = await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify(body)});
-      if(!putRes.ok){ const e=await putRes.json(); throw new Error(e.message||'Unknown error'); }
+      const jsonB64 = btoa(unescape(encodeURIComponent(JSON.stringify(stateObj,null,2))));
+      await ghPut(filePath, jsonB64);
 
       // Record the timestamp locally — fetchRemote() will skip this exact version on reload
       const s2=getStore(); s2.__ghSyncedAt=ts; setStore(s2);

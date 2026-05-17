@@ -379,5 +379,35 @@
     "cert-rics": "portfolio-images/cert-rics.jpg",
     "cert-p1": "portfolio-images/cert-p1.jpg"
   },
-  "savedAt": 1779013013110
+  "endorsements": [
+    {
+      "id": 1779017184797,
+      "name": "Venkata Shiva Teja Katta",
+      "designation": "BIM Manager",
+      "company": "Shapoorji & Pallonji Constructions",
+      "review": "--"
+    },
+    {
+      "id": 1779017216898,
+      "name": "Suji Sugathan",
+      "designation": "Senior BIM Manager",
+      "company": "DSA Architects International",
+      "review": "--"
+    },
+    {
+      "id": 1779018154916,
+      "name": "Naga Uddandam",
+      "designation": "BIM Lead",
+      "company": "Mapa Group",
+      "review": "--"
+    },
+    {
+      "id": 1779018190427,
+      "name": "Nived Puthussery",
+      "designation": "BIM Manager",
+      "company": "DSA Architects International",
+      "review": "--"
+    }
+  ],
+  "savedAt": 1779018205507
 }

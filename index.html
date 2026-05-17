@@ -342,6 +342,58 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
 #syncToast svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;animation:spin .9s linear infinite}
 #syncToast.done svg{animation:none}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ════════════════════════════════════════ SKILL TAGS — EDIT */
+.btn-add-skill-tag{display:none;align-items:center;gap:.4rem;padding:.35rem .9rem;background:transparent;border:1px dashed var(--rose);color:var(--rose);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif}
+.btn-add-skill-tag:hover{background:rgba(200,169,126,.12)}
+.btn-add-skill-tag svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+body.edit-mode .btn-add-skill-tag{display:inline-flex}
+body.edit-mode .skill-tag{padding-right:1.5rem;position:relative}
+.skill-tag-del{display:none;position:absolute;right:.3rem;top:50%;transform:translateY(-50%);width:13px;height:13px;background:none;border:none;cursor:pointer;color:var(--mauve);font-size:11px;line-height:1;padding:0;transition:color .2s;align-items:center;justify-content:center}
+.skill-tag-del:hover{color:#c0392b}
+body.edit-mode .skill-tag .skill-tag-del{display:flex}
+
+/* ════════════════════════════════════════ TECH TAB — ADD CATEGORY */
+.btn-add-tab{display:none;align-items:center;gap:.4rem;padding:.9rem 1.2rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);border:none;border-bottom:2px dashed transparent;background:transparent;margin-bottom:-1px;cursor:pointer;transition:var(--ease);white-space:nowrap;font-family:'Nunito',sans-serif}
+.btn-add-tab:hover{color:var(--navy)}
+.btn-add-tab svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+body.edit-mode .btn-add-tab{display:inline-flex}
+.tech-tab-wrap{position:relative;display:inline-flex;align-items:center}
+.tech-tab-del{display:none;position:absolute;top:4px;right:4px;width:14px;height:14px;background:rgba(192,57,43,.8);border:none;border-radius:50%;color:#fff;font-size:9px;cursor:pointer;align-items:center;justify-content:center;z-index:5;line-height:1}
+body.edit-mode .tech-tab-wrap .tech-tab-del{display:flex}
+
+/* ════════════════════════════════════════ CERT CARD EDIT CONTROLS */
+.cert-card{position:relative}
+.cert-card-controls{position:absolute;top:8px;left:8px;display:none;gap:5px;z-index:10}
+body.edit-mode .cert-card-controls{display:flex}
+.cert-ctrl-btn{width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--ease)}
+.cert-ctrl-edit{background:rgba(24,23,20,.78);color:var(--cream)}
+.cert-ctrl-edit:hover{background:var(--rose);color:var(--navy)}
+.cert-ctrl-del{background:rgba(192,57,43,.75);color:#fff}
+.cert-ctrl-del:hover{background:rgba(192,57,43,1)}
+.cert-ctrl-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ════════════════════════════════════════ ENDORSEMENTS */
+#endorsements{background:var(--white)}
+.endorse-bar{display:flex;justify-content:flex-end;margin-bottom:2.5rem}
+body:not(.edit-mode) .btn-add-endorse{display:none!important}
+.btn-add-endorse{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:var(--rose);border:1px solid var(--rose);color:var(--navy);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif;font-weight:600}
+.btn-add-endorse:hover{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+.btn-add-endorse svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.endorse-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.75rem}
+.endorse-card{background:var(--cream);border:1px solid var(--border);padding:2rem 2rem 1.75rem;position:relative;transition:var(--ease)}
+.endorse-card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.endorse-quote{font-family:'Libre Baskerville',serif;font-size:3.8rem;line-height:.8;color:var(--rose);opacity:.4;margin-bottom:.6rem;user-select:none}
+.endorse-review{font-size:.88rem;line-height:1.88;color:var(--indigo);margin-bottom:1.5rem;font-style:italic}
+.endorse-divider{width:32px;height:1px;background:var(--rose);margin-bottom:1.1rem}
+.endorse-name{font-family:'Libre Baskerville',serif;font-size:1rem;color:var(--navy);margin-bottom:.18rem}
+.endorse-role{font-size:.72rem;color:var(--mauve);letter-spacing:.04em;line-height:1.5}
+.endorse-card .delete-btn{opacity:0;top:10px;right:10px}
+.endorse-card:hover .delete-btn{opacity:1}
+.endorse-edit-btn{position:absolute;top:10px;right:42px;width:26px;height:26px;background:rgba(24,23,20,.78);border:1px solid rgba(200,169,126,.5);border-radius:50%;color:var(--cream);cursor:pointer;display:none;align-items:center;justify-content:center;transition:var(--ease)}
+body.edit-mode .endorse-card:hover .endorse-edit-btn{display:flex}
+.endorse-edit-btn:hover{background:var(--rose);border-color:var(--rose);color:var(--navy)}
+.endorse-edit-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
 </style>
 </head>
 <body>
@@ -355,6 +407,7 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
     <li><a href="#projects">Projects</a></li>
     <li><a href="#technical">Technical</a></li>
     <li><a href="#certifications">Certifications</a></li>
+    <li><a href="#endorsements">Endorsements</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
@@ -396,22 +449,30 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
         <p class="about-bio fade-in" data-editable data-key="about-bio-1">I am a BIM professional with nearly nine years of industry experience, currently operating as a BIM Manager at DSA Architects International in Riyadh, Saudi Arabia. My expertise spans multi-disciplinary BIM coordination, clash management, and the strategic implementation of digital information workflows to support efficient, compliant, and high-quality project delivery.</p>
         <p class="about-bio fade-in" data-editable data-key="about-bio-2">My work has taken me across global markets — from landmark luxury hospitality developments in Saudi Arabia's Diriyah and Qiddiya districts, to mixed-use residential towers across British Columbia, Canada, and educational facilities in Nevada, USA. I specialise in automating repetitive BIM workflows through Python and C# scripting, and in delivering real-time project insights through custom Power BI dashboards.</p>
         <span class="skills-label fade-in">Software &amp; Technical Skills</span>
-        <div class="skills-grid fade-in">
-          <span class="skill-tag">Autodesk Revit</span><span class="skill-tag">Navisworks</span>
-          <span class="skill-tag">BIM360 / ACC</span><span class="skill-tag">Dynamo</span>
-          <span class="skill-tag">AutoCAD</span><span class="skill-tag">Power BI</span>
-          <span class="skill-tag">Python</span><span class="skill-tag">C#</span>
-          <span class="skill-tag">Civil 3D</span><span class="skill-tag">ISO 19650</span>
-          <span class="skill-tag">LOD 100–500</span><span class="skill-tag">Clash Coordination</span>
-          <span class="skill-tag">Visual Programming</span><span class="skill-tag">Revit Families</span>
+        <div class="skills-grid fade-in" id="skillTagsGrid">
+          <span class="skill-tag" data-static-skill="Autodesk Revit">Autodesk Revit<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Navisworks">Navisworks<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="BIM360 / ACC">BIM360 / ACC<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Dynamo">Dynamo<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="AutoCAD">AutoCAD<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Power BI">Power BI<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Python">Python<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="C#">C#<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Civil 3D">Civil 3D<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="ISO 19650">ISO 19650<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="LOD 100–500">LOD 100–500<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Clash Coordination">Clash Coordination<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Visual Programming">Visual Programming<button class="skill-tag-del" title="Remove">×</button></span>
+          <span class="skill-tag" data-static-skill="Revit Families">Revit Families<button class="skill-tag-del" title="Remove">×</button></span>
         </div>
+        <button class="btn-add-skill-tag" id="btnAddSkillTag"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Skill</button>
       </div>
       <div>
         <div class="about-stats fade-in">
-          <div class="stat-card"><div class="stat-number">9+</div><div class="stat-label">Years Experience</div></div>
-          <div class="stat-card"><div class="stat-number">14+</div><div class="stat-label">Major Projects</div></div>
-          <div class="stat-card"><div class="stat-number">5+</div><div class="stat-label">Countries</div></div>
-          <div class="stat-card"><div class="stat-number">4</div><div class="stat-label">Companies</div></div>
+          <div class="stat-card"><div class="stat-number" data-editable data-key="stat-years">9+</div><div class="stat-label" data-editable data-key="stat-years-lbl">Years Experience</div></div>
+          <div class="stat-card"><div class="stat-number" data-editable data-key="stat-projects">14+</div><div class="stat-label" data-editable data-key="stat-projects-lbl">Major Projects</div></div>
+          <div class="stat-card"><div class="stat-number" data-editable data-key="stat-countries">5+</div><div class="stat-label" data-editable data-key="stat-countries-lbl">Countries</div></div>
+          <div class="stat-card"><div class="stat-number" data-editable data-key="stat-companies">4</div><div class="stat-label" data-editable data-key="stat-companies-lbl">Companies</div></div>
         </div>
         <div class="edu-cards fade-in">
           <div class="edu-card">
@@ -743,11 +804,12 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
     <h2 class="section-title fade-in">Technical Skills</h2>
     <div class="section-line fade-in"></div>
 
-    <div class="tech-tabs fade-in">
+    <div class="tech-tabs fade-in" id="techTabsRow">
       <button class="tech-tab active" data-tab="clash">Clash Coordination</button>
       <button class="tech-tab" data-tab="powerbi">Power BI Dashboards</button>
       <button class="tech-tab" data-tab="dynamo">Dynamo &amp; Scripting</button>
       <button class="tech-tab" data-tab="families">Revit Families</button>
+      <button class="btn-add-tab" id="btnAddTechTab"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Category</button>
     </div>
 
     <!-- Clash Coordination -->
@@ -923,6 +985,10 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
 
       <!-- RICS — pre-populated -->
       <div class="cert-card fade-in" data-cert-id="rics">
+        <div class="cert-card-controls">
+          <button class="cert-ctrl-btn cert-ctrl-edit" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="cert-ctrl-btn cert-ctrl-del" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+        </div>
         <div class="cert-badge-wrap" data-slot="cert-rics">
           <div class="cert-badge-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M9 12l-4 8h14l-4-8"/><path d="M12 12v8"/></svg>
@@ -941,6 +1007,10 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
 
       <!-- Placeholder card 1 -->
       <div class="cert-card fade-in cert-empty" data-cert-id="placeholder-1">
+        <div class="cert-card-controls">
+          <button class="cert-ctrl-btn cert-ctrl-edit" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="cert-ctrl-btn cert-ctrl-del" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+        </div>
         <div class="cert-badge-wrap empty-badge" data-slot="cert-p1">
           <div class="cert-badge-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
@@ -959,6 +1029,10 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
 
       <!-- Placeholder card 2 -->
       <div class="cert-card fade-in cert-empty" data-cert-id="placeholder-2">
+        <div class="cert-card-controls">
+          <button class="cert-ctrl-btn cert-ctrl-edit" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="cert-ctrl-btn cert-ctrl-del" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+        </div>
         <div class="cert-badge-wrap empty-badge" data-slot="cert-p2">
           <div class="cert-badge-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
@@ -975,6 +1049,24 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ENDORSEMENTS ══════════════ -->
+<section id="endorsements">
+  <div class="section">
+    <span class="section-label fade-in">What They Say</span>
+    <h2 class="section-title fade-in">Endorsements</h2>
+    <div class="section-line fade-in"></div>
+    <div class="endorse-bar fade-in">
+      <button class="btn-add-endorse" id="btnAddEndorse">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Endorsement
+      </button>
+    </div>
+    <div class="endorse-grid" id="endorseGrid">
+      <!-- filled dynamically by JS -->
     </div>
   </div>
 </section>
@@ -1310,6 +1402,66 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
   </div>
 </div>
 
+<!-- ══════════════ ADD TECH CATEGORY MODAL ══════════════ -->
+<div class="modal-backdrop" id="techCatModalBackdrop">
+  <div class="modal" style="max-width:480px">
+    <button class="modal-close" id="techCatModalClose">×</button>
+    <h3 class="modal-title">Add Category</h3>
+    <p class="modal-subtitle">Create a new tab in the Technical Skills section.</p>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Category Name *</label>
+        <input type="text" id="tcf-name" placeholder="e.g. BIM Execution Plans">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Short Introduction</label>
+        <textarea id="tcf-intro" placeholder="Brief description of what this category covers…" style="min-height:70px"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="techCatBtnCancel">Cancel</button>
+      <button class="btn-submit" id="techCatBtnSubmit">Add Category</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADD / EDIT ENDORSEMENT MODAL ══════════════ -->
+<div class="modal-backdrop" id="endorseModalBackdrop">
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" id="endorseModalClose">×</button>
+    <h3 class="modal-title" id="endorseModalTitle">Add Endorsement</h3>
+    <p class="modal-subtitle">Add a colleague, client, or manager's endorsement with their review.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name *</label>
+        <input type="text" id="ef-endorse-name" placeholder="e.g. Ahmed Al-Rashid">
+      </div>
+      <div class="form-group">
+        <label>Designation</label>
+        <input type="text" id="ef-endorse-desig" placeholder="e.g. Project Director">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Company / Organisation</label>
+        <input type="text" id="ef-endorse-company" placeholder="e.g. DSA Architects International">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Review / Endorsement *</label>
+        <textarea id="ef-endorse-review" placeholder="Their words about your work…" style="min-height:110px"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="endorseBtnCancel">Cancel</button>
+      <button class="btn-submit" id="endorseBtnSubmit">Add Endorsement</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ JAVASCRIPT ══════════════ -->
 <script>
 const STORE_KEY = 'dv_portfolio_v2';
@@ -1362,6 +1514,13 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
         imgSlots[k] = v;
     }
     if(Object.keys(imgSlots).length) state.imageSlots = imgSlots;
+    // New feature state
+    if(s.deletedSkillTags?.length)    state.deletedSkillTags    = s.deletedSkillTags;
+    if(s.addedSkillTags?.length)      state.addedSkillTags      = s.addedSkillTags;
+    if(s.customTechCategories?.length)state.customTechCategories= s.customTechCategories;
+    if(s.staticCertOverrides && Object.keys(s.staticCertOverrides||{}).length) state.staticCertOverrides = s.staticCertOverrides;
+    if(s.deletedStaticCerts?.length)  state.deletedStaticCerts  = s.deletedStaticCerts;
+    if(s.endorsements?.length)        state.endorsements        = s.endorsements;
     return state;
   }
 
@@ -1385,6 +1544,13 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     if(state.customCerts)    s.customCerts    = state.customCerts;
     // Image/video slot data (cross-device image sync)
     if(state.imageSlots) Object.entries(state.imageSlots).forEach(([k,v])=>{ s[k]=v; });
+    // New feature state
+    if(state.deletedSkillTags)    s.deletedSkillTags    = state.deletedSkillTags;
+    if(state.addedSkillTags)      s.addedSkillTags      = state.addedSkillTags;
+    if(state.customTechCategories)s.customTechCategories= state.customTechCategories;
+    if(state.staticCertOverrides) s.staticCertOverrides = state.staticCertOverrides;
+    if(state.deletedStaticCerts)  s.deletedStaticCerts  = state.deletedStaticCerts;
+    if(state.endorsements)        s.endorsements        = state.endorsements;
     // Record when this remote snapshot was created so we can skip re-fetching same data
     if(state.savedAt) s.__ghSyncedAt = state.savedAt;
     setStore(s);
@@ -1604,6 +1770,14 @@ function rehydrateFromStore(){
   if(typeof restoreExpData==='function') restoreExpData();
   // 7. Custom certs (dup-safe)
   if(typeof restoreCustomCerts==='function') restoreCustomCerts();
+  // 8. Skill tag overrides (deleted static + added custom)
+  if(typeof restoreSkillTags==='function') restoreSkillTags();
+  // 9. Custom tech categories + panels
+  if(typeof restoreCustomTechCategories==='function') restoreCustomTechCategories();
+  // 10. Static cert overrides + deletions
+  if(typeof restoreStaticCerts==='function') restoreStaticCerts();
+  // 11. Endorsements
+  if(typeof restoreEndorsements==='function') restoreEndorsements();
 }
 
 /* ══════════════════════════════════════════════════════
@@ -2097,9 +2271,22 @@ const certCancel   = document.getElementById('certBtnCancel');
 const certSubmit   = document.getElementById('certBtnSubmit');
 const certGrid     = document.getElementById('certGrid');
 let pendingCertImg = null;
+let editingStaticCertId = null;
 
-btnAddCert?.addEventListener('click', ()=>{ certBackdrop.classList.add('open'); pendingCertImg=null; resetCertForm(); });
-[certClose,certCancel].forEach(b=>b?.addEventListener('click',()=>certBackdrop.classList.remove('open')));
+btnAddCert?.addEventListener('click', ()=>{
+  editingStaticCertId=null;
+  document.querySelector('#certModalBackdrop .modal-title').textContent='Add Certification';
+  document.querySelector('#certModalBackdrop .modal-subtitle').textContent='Add a professional certification, course completion, or industry accreditation.';
+  certSubmit.textContent='Add Certification';
+  certBackdrop.classList.add('open'); pendingCertImg=null; resetCertForm();
+});
+function closeCertModal(){
+  certBackdrop.classList.remove('open');
+  editingStaticCertId=null;
+  document.querySelector('#certModalBackdrop .modal-title').textContent='Add Certification';
+  certSubmit.textContent='Add Certification';
+}
+[certClose,certCancel].forEach(b=>b?.addEventListener('click', closeCertModal));
 certBackdrop?.addEventListener('click',e=>{ if(e.target===certBackdrop) certBackdrop.classList.remove('open'); });
 
 document.getElementById('certImgFile')?.addEventListener('change',e=>{
@@ -2159,7 +2346,36 @@ certSubmit?.addEventListener('click',()=>{
   const name=document.getElementById('cf-name').value.trim();
   const issuer=document.getElementById('cf-issuer').value.trim();
   if(!name||!issuer){ alert('Please enter the certification name and issuer.'); return; }
-  const c={ id:Date.now(), name, issuer, date:document.getElementById('cf-date').value.trim(), credId:document.getElementById('cf-id').value.trim(), desc:document.getElementById('cf-desc').value.trim(), imgData:pendingCertImg };
+  const date=document.getElementById('cf-date').value.trim();
+
+  // ── EDIT MODE: update a static cert card ──
+  if(editingStaticCertId){
+    const card=document.querySelector(`.cert-card[data-cert-id="${editingStaticCertId}"]`);
+    if(card){
+      const issuerEl=card.querySelector('.cert-issuer'); if(issuerEl) issuerEl.textContent=issuer;
+      const nameEl=card.querySelector('.cert-name');     if(nameEl)   nameEl.textContent=name;
+      if(date){
+        let dt=card.querySelector('.cert-date');
+        if(!dt){ dt=document.createElement('span'); dt.className='cert-date'; card.querySelector('.cert-meta').appendChild(dt); }
+        dt.textContent=date;
+      }
+      if(pendingCertImg){
+        const wrap=card.querySelector('.cert-badge-wrap');
+        let img=wrap.querySelector('img');
+        if(!img){ img=document.createElement('img'); img.style.cssText='width:100%;height:100%;object-fit:contain;padding:1.5rem'; wrap.prepend(img); }
+        img.src=pendingCertImg; wrap.querySelector('.cert-badge-placeholder')?.remove();
+        const ss=getStore(); ss[wrap.dataset.slot]=pendingCertImg; setStore(ss);
+      }
+      const s=getStore();
+      const ov=s.staticCertOverrides||{};
+      ov[editingStaticCertId]={issuer,name,date};
+      s.staticCertOverrides=ov; setStore(s);
+    }
+    closeCertModal(); return;
+  }
+
+  // ── ADD MODE: create a new cert card ──
+  const c={ id:Date.now(), name, issuer, date, credId:document.getElementById('cf-id').value.trim(), desc:document.getElementById('cf-desc').value.trim(), imgData:pendingCertImg };
   const card=buildCertCard(c,true);
   certGrid.appendChild(card);
   fadeObs.observe(card);
@@ -2550,6 +2766,329 @@ function resetCertForm(){
   document.getElementById('certImgFile').value='';
   pendingCertImg=null;
 }
+
+/* ══════════════════════════════════════
+   STATIC CERT CARD — EDIT / DELETE
+   ══════════════════════════════════════ */
+function restoreStaticCerts(){
+  const s=getStore();
+  // Hide deleted certs
+  (s.deletedStaticCerts||[]).forEach(id=>{
+    const card=document.querySelector(`.cert-card[data-cert-id="${id}"]`);
+    if(card) card.style.display='none';
+  });
+  // Apply text overrides
+  const ovs=s.staticCertOverrides||{};
+  Object.entries(ovs).forEach(([id,ov])=>{
+    const card=document.querySelector(`.cert-card[data-cert-id="${id}"]`);
+    if(!card) return;
+    if(ov.issuer){ const el=card.querySelector('.cert-issuer'); if(el) el.textContent=ov.issuer; }
+    if(ov.name){   const el=card.querySelector('.cert-name');   if(el) el.textContent=ov.name;   }
+    if(ov.date){
+      let dt=card.querySelector('.cert-date');
+      if(!dt){ dt=document.createElement('span'); dt.className='cert-date'; card.querySelector('.cert-meta').appendChild(dt); }
+      dt.textContent=ov.date;
+    }
+  });
+}
+restoreStaticCerts();
+
+// Wire edit/delete controls on static cert cards
+document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
+  const certId=card.dataset.certId;
+  if(!['rics','placeholder-1','placeholder-2'].includes(certId)) return;
+  const editBtn=card.querySelector('.cert-ctrl-edit');
+  const delBtn =card.querySelector('.cert-ctrl-del');
+  editBtn?.addEventListener('click',e=>{
+    e.stopPropagation();
+    editingStaticCertId=certId;
+    const issuer=card.querySelector('.cert-issuer')?.textContent||'';
+    const name  =card.querySelector('.cert-name')?.textContent||'';
+    const date  =(card.querySelector('.cert-date')?.textContent||'').replace('Add year →','').trim();
+    document.getElementById('cf-name').value   =name;
+    document.getElementById('cf-issuer').value =issuer;
+    document.getElementById('cf-date').value   =date;
+    document.getElementById('cf-id').value     ='';
+    document.getElementById('cf-desc').value   ='';
+    document.getElementById('certImgUpload').classList.remove('has-image');
+    document.getElementById('certImgPreview').src='';
+    pendingCertImg=null;
+    document.querySelector('#certModalBackdrop .modal-title').textContent='Edit Certification';
+    document.querySelector('#certModalBackdrop .modal-subtitle').textContent='Update the details below. Changes are saved automatically.';
+    certSubmit.textContent='Save Changes';
+    certBackdrop.classList.add('open');
+  });
+  delBtn?.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(!confirm('Remove this certification card?')) return;
+    card.style.display='none';
+    const s=getStore();
+    s.deletedStaticCerts=[...new Set([...(s.deletedStaticCerts||[]),certId])];
+    setStore(s);
+  });
+});
+
+/* ══════════════════════════════════════
+   SKILL TAGS — ADD / DELETE / RESTORE
+   ══════════════════════════════════════ */
+(()=>{
+  const tagGrid =document.getElementById('skillTagsGrid');
+  const addTagBtn=document.getElementById('btnAddSkillTag');
+
+  function wireTagDel(tag){
+    const del=tag.querySelector('.skill-tag-del');
+    if(!del||del._wired) return;
+    del._wired=true;
+    del.addEventListener('click',e=>{
+      e.stopPropagation();
+      const text=tag.dataset.staticSkill||tag.dataset.customSkill;
+      tag.remove();
+      const s=getStore();
+      if(tag.dataset.staticSkill){
+        s.deletedSkillTags=[...new Set([...(s.deletedSkillTags||[]),text])];
+      } else {
+        s.addedSkillTags=(s.addedSkillTags||[]).filter(t=>t!==text);
+      }
+      setStore(s);
+    });
+  }
+  // Wire static tags
+  document.querySelectorAll('#skillTagsGrid .skill-tag').forEach(wireTagDel);
+
+  // Add new skill tag
+  addTagBtn?.addEventListener('click',()=>{
+    const text=prompt('Enter new skill tag:');
+    if(!text?.trim()) return;
+    const t=text.trim();
+    const existing=[...tagGrid.querySelectorAll('.skill-tag')].map(el=>el.dataset.staticSkill||el.dataset.customSkill).filter(Boolean);
+    if(existing.includes(t)){ alert('That skill already exists.'); return; }
+    const tag=document.createElement('span');
+    tag.className='skill-tag'; tag.dataset.customSkill=t;
+    tag.innerHTML=t+'<button class="skill-tag-del" title="Remove">×</button>';
+    tagGrid.appendChild(tag);
+    wireTagDel(tag);
+    const s=getStore();
+    s.addedSkillTags=[...new Set([...(s.addedSkillTags||[]),t])];
+    setStore(s);
+  });
+
+  // Restore on page load / rehydrate
+  window.restoreSkillTags=function(){
+    const s=getStore();
+    // Remove deleted static tags
+    document.querySelectorAll('#skillTagsGrid .skill-tag[data-static-skill]').forEach(tag=>{
+      if((s.deletedSkillTags||[]).includes(tag.dataset.staticSkill)) tag.remove();
+    });
+    // Add custom tags (dup-safe)
+    (s.addedSkillTags||[]).forEach(t=>{
+      if(tagGrid.querySelector(`[data-custom-skill]`)&&[...tagGrid.querySelectorAll('[data-custom-skill]')].some(el=>el.dataset.customSkill===t)) return;
+      const tag=document.createElement('span');
+      tag.className='skill-tag'; tag.dataset.customSkill=t;
+      tag.innerHTML=t+'<button class="skill-tag-del" title="Remove">×</button>';
+      tagGrid.appendChild(tag);
+      wireTagDel(tag);
+    });
+  };
+  restoreSkillTags();
+})();
+
+/* ══════════════════════════════════════
+   TECH CATEGORIES — ADD / DELETE
+   ══════════════════════════════════════ */
+(()=>{
+  const tabsRow  =document.getElementById('techTabsRow');
+  const addTabBtn=document.getElementById('btnAddTechTab');
+
+  function updateSkillTabSelector(){
+    const sel=document.getElementById('sf-tab');
+    if(!sel) return;
+    [...sel.options].filter(o=>o.dataset.custom).forEach(o=>o.remove());
+    const s=getStore();
+    (s.customTechCategories||[]).forEach(cat=>{
+      if(sel.querySelector(`option[value="${cat.id}"]`)) return;
+      const opt=document.createElement('option');
+      opt.value=cat.id; opt.textContent=cat.name; opt.dataset.custom='1';
+      sel.appendChild(opt);
+    });
+  }
+
+  function addTechCategory(cat){
+    if(document.getElementById('panel-'+cat.id)) return; // already exists
+
+    // Tab wrapper (needed for .tech-tab-del CSS rule)
+    const wrap=document.createElement('div');
+    wrap.className='tech-tab-wrap'; wrap.dataset.customTabWrap=cat.id;
+
+    const tabBtn=document.createElement('button');
+    tabBtn.className='tech-tab'; tabBtn.dataset.tab=cat.id; tabBtn.dataset.customTab='1';
+    tabBtn.textContent=cat.name;
+    tabBtn.addEventListener('click',()=>{
+      document.querySelectorAll('.tech-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tech-panel').forEach(p=>p.classList.remove('active'));
+      tabBtn.classList.add('active');
+      document.getElementById('panel-'+cat.id)?.classList.add('active');
+    });
+
+    const del=document.createElement('button');
+    del.className='tech-tab-del'; del.title='Delete category'; del.textContent='×';
+    del.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(!confirm(`Delete category "${cat.name}" and all its skill cards?`)) return;
+      wrap.remove();
+      document.getElementById('panel-'+cat.id)?.remove();
+      const s=getStore();
+      s.customTechCategories=(s.customTechCategories||[]).filter(c=>c.id!==cat.id);
+      s.customSkills=(s.customSkills||[]).filter(sk=>sk.tab!==cat.id);
+      setStore(s);
+      updateSkillTabSelector();
+    });
+    wrap.appendChild(tabBtn); wrap.appendChild(del);
+    tabsRow.insertBefore(wrap,addTabBtn);
+
+    // Panel
+    const panel=document.createElement('div');
+    panel.className='tech-panel'; panel.id='panel-'+cat.id;
+    panel.innerHTML=`
+      <p class="tech-intro">${cat.intro||'Describe this technical skill category.'}</p>
+      <button class="btn-add-skill" data-tab="${cat.id}"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Skill Card</button>
+      <div class="tech-grid"></div>`;
+    panel.querySelector('.btn-add-skill').addEventListener('click',()=>openSkillModal('add',null,cat.id));
+    // Insert after last tech-panel
+    const allPanels=[...document.querySelectorAll('.tech-panel')];
+    const last=allPanels[allPanels.length-1];
+    if(last) last.after(panel);
+    else document.querySelector('#technical .section').appendChild(panel);
+
+    updateSkillTabSelector();
+  }
+
+  // Open modal
+  addTabBtn?.addEventListener('click',()=>{
+    document.getElementById('tcf-name').value='';
+    document.getElementById('tcf-intro').value='';
+    document.getElementById('techCatModalBackdrop').classList.add('open');
+  });
+  document.getElementById('techCatModalClose')?.addEventListener('click',()=>document.getElementById('techCatModalBackdrop').classList.remove('open'));
+  document.getElementById('techCatBtnCancel')?.addEventListener('click',()=>document.getElementById('techCatModalBackdrop').classList.remove('open'));
+  document.getElementById('techCatModalBackdrop')?.addEventListener('click',e=>{ if(e.target===document.getElementById('techCatModalBackdrop')) document.getElementById('techCatModalBackdrop').classList.remove('open'); });
+
+  document.getElementById('techCatBtnSubmit')?.addEventListener('click',()=>{
+    const name=document.getElementById('tcf-name').value.trim();
+    const intro=document.getElementById('tcf-intro').value.trim();
+    if(!name){ alert('Please enter a category name.'); return; }
+    const id='cat-'+Date.now();
+    addTechCategory({id,name,intro});
+    const s=getStore();
+    s.customTechCategories=[...(s.customTechCategories||[]),{id,name,intro}];
+    setStore(s);
+    document.getElementById('techCatModalBackdrop').classList.remove('open');
+  });
+
+  window.restoreCustomTechCategories=function(){
+    const s=getStore();
+    (s.customTechCategories||[]).forEach(cat=>addTechCategory(cat));
+    updateSkillTabSelector();
+  };
+  restoreCustomTechCategories();
+})();
+
+/* ══════════════════════════════════════
+   ENDORSEMENTS — ADD / EDIT / DELETE
+   ══════════════════════════════════════ */
+(()=>{
+  const endorseBackdrop=document.getElementById('endorseModalBackdrop');
+  const endorseGrid    =document.getElementById('endorseGrid');
+  const btnAddEndorse  =document.getElementById('btnAddEndorse');
+  let editingEndorseId =null;
+
+  function buildEndorseCard(e){
+    const card=document.createElement('div');
+    card.className='endorse-card fade-in'; card.dataset.eid=e.id;
+    card.innerHTML=`
+      <div class="endorse-quote">&ldquo;</div>
+      <p class="endorse-review">${e.review||''}</p>
+      <div class="endorse-divider"></div>
+      <div class="endorse-name">${e.name||''}</div>
+      <div class="endorse-role">${[e.designation,e.company].filter(Boolean).join(' · ')}</div>
+      <button class="endorse-edit-btn" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+      <button class="delete-btn" title="Remove endorsement">×</button>`;
+    card.querySelector('.endorse-edit-btn').addEventListener('click',ev=>{
+      ev.stopPropagation();
+      editingEndorseId=e.id;
+      document.getElementById('ef-endorse-name').value   =e.name||'';
+      document.getElementById('ef-endorse-desig').value  =e.designation||'';
+      document.getElementById('ef-endorse-company').value=e.company||'';
+      document.getElementById('ef-endorse-review').value =e.review||'';
+      document.getElementById('endorseModalTitle').textContent='Edit Endorsement';
+      document.getElementById('endorseBtnSubmit').textContent='Save Changes';
+      endorseBackdrop.classList.add('open');
+    });
+    card.querySelector('.delete-btn').addEventListener('click',ev=>{
+      ev.stopPropagation();
+      if(!confirm(`Remove endorsement from ${e.name}?`)) return;
+      card.remove();
+      const s=getStore();
+      s.endorsements=(s.endorsements||[]).filter(x=>x.id!==e.id);
+      setStore(s);
+    });
+    return card;
+  }
+
+  function openEndorseModal(){
+    editingEndorseId=null;
+    ['ef-endorse-name','ef-endorse-desig','ef-endorse-company','ef-endorse-review'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('endorseModalTitle').textContent='Add Endorsement';
+    document.getElementById('endorseBtnSubmit').textContent='Add Endorsement';
+    endorseBackdrop.classList.add('open');
+  }
+
+  btnAddEndorse?.addEventListener('click',openEndorseModal);
+  document.getElementById('endorseModalClose')?.addEventListener('click',()=>endorseBackdrop.classList.remove('open'));
+  document.getElementById('endorseBtnCancel')?.addEventListener('click',()=>endorseBackdrop.classList.remove('open'));
+  endorseBackdrop?.addEventListener('click',e=>{ if(e.target===endorseBackdrop) endorseBackdrop.classList.remove('open'); });
+
+  document.getElementById('endorseBtnSubmit')?.addEventListener('click',()=>{
+    const name  =document.getElementById('ef-endorse-name').value.trim();
+    const review=document.getElementById('ef-endorse-review').value.trim();
+    if(!name||!review){ alert('Please enter the name and review text.'); return; }
+    const data={
+      id:editingEndorseId||Date.now(),
+      name,
+      designation:document.getElementById('ef-endorse-desig').value.trim(),
+      company:    document.getElementById('ef-endorse-company').value.trim(),
+      review
+    };
+    if(editingEndorseId){
+      const card=endorseGrid.querySelector(`[data-eid="${editingEndorseId}"]`);
+      if(card){
+        card.querySelector('.endorse-review').textContent=data.review;
+        card.querySelector('.endorse-name').textContent  =data.name;
+        card.querySelector('.endorse-role').textContent  =[data.designation,data.company].filter(Boolean).join(' · ');
+      }
+      const s=getStore();
+      const idx=(s.endorsements||[]).findIndex(x=>x.id===editingEndorseId);
+      if(idx>=0) s.endorsements[idx]=data; setStore(s);
+    } else {
+      const card=buildEndorseCard(data);
+      endorseGrid.appendChild(card);
+      fadeObs.observe(card);
+      const s=getStore();
+      s.endorsements=[...(s.endorsements||[]),data]; setStore(s);
+    }
+    endorseBackdrop.classList.remove('open');
+  });
+
+  window.restoreEndorsements=function(){
+    const s=getStore();
+    (s.endorsements||[]).forEach(e=>{
+      if(endorseGrid.querySelector(`[data-eid="${e.id}"]`)) return;
+      const card=buildEndorseCard(e);
+      endorseGrid.appendChild(card);
+      fadeObs.observe(card);
+    });
+  };
+  restoreEndorsements();
+})();
 
 function resetForm(){
   ['f-name','f-desc','f-area','f-role','f-cde','f-duration','f-country-custom'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });

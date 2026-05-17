@@ -1329,7 +1329,10 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
   function setGHCfg(c){ try{ localStorage.setItem(GH_CFG, JSON.stringify(c)); }catch{} }
 
   /* ── Build the state object to commit ── */
-  function buildState(){
+  /* ── Build the full state object to commit to GitHub ──
+     async so it can compress ALL images (including ones uploaded before
+     compression was added) before writing them into the JSON            */
+  async function buildState(){
     const s = getStore();
     const state = { version:2 };
     const txt={}, proj={}, tech={}, expOv={}, expDel=[];
@@ -1340,24 +1343,46 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       if(k.startsWith('exp-override-'))     expOv[k.slice(13)] = v;
       if(k.startsWith('exp-deleted-') && v) expDel.push(k.slice(12));
     }
-    if(Object.keys(txt).length)   state.textOverrides    = txt;
-    if(Object.keys(proj).length)  state.projectOverrides = proj;
-    if(Object.keys(tech).length)  state.techCardOverrides= tech;
-    if(Object.keys(expOv).length) state.expOverrides     = expOv;
-    if(expDel.length)             state.expDeleted       = expDel;
-    // Custom entries — include imgData (compressed at upload time, so safe to store)
-    if(s.customProjects?.length)  state.customProjects   = s.customProjects;
-    if(s.customSkills?.length)    state.customSkills     = s.customSkills;
-    if(s.customExp?.length)       state.customExp        = s.customExp;
-    if(s.customCerts?.length)     state.customCerts      = s.customCerts;
-    // All other image/video slot data (slot keys like 'capella', 'custom-123', etc.)
+    if(Object.keys(txt).length) state.textOverrides = txt;
+
+    // Compress images inside proj-override objects (may be large if uploaded with old code)
+    for(const pid of Object.keys(proj)){
+      if(proj[pid]?.img?.startsWith('data:image'))
+        proj[pid] = { ...proj[pid], img: await compressImage(proj[pid].img) };
+    }
+    if(Object.keys(proj).length)  state.projectOverrides  = proj;
+    if(Object.keys(tech).length)  state.techCardOverrides = tech;
+    if(Object.keys(expOv).length) state.expOverrides      = expOv;
+    if(expDel.length)             state.expDeleted        = expDel;
+
+    // Custom projects — compress imgData on the way out
+    if(s.customProjects?.length){
+      state.customProjects = await Promise.all(s.customProjects.map(async p=>{
+        if(p.imgData?.startsWith('data:image')) return {...p, imgData: await compressImage(p.imgData)};
+        return p;
+      }));
+    }
+    if(s.customSkills?.length)  state.customSkills = s.customSkills;
+    if(s.customExp?.length)     state.customExp    = s.customExp;
+
+    // Custom certs — compress imgData on the way out
+    if(s.customCerts?.length){
+      state.customCerts = await Promise.all(s.customCerts.map(async c=>{
+        if(c.imgData?.startsWith('data:image')) return {...c, imgData: await compressImage(c.imgData)};
+        return c;
+      }));
+    }
+
+    // All remaining image slot keys (e.g. 'capella', 'custom-123', 'cert-custom-456')
+    // Compress each one; skip videos (too large for JSON) and skip non-image data
     const imgSlots = {};
     const skipKeys = new Set(['customProjects','customSkills','customExp','customCerts']);
     for(const [k,v] of Object.entries(s)){
       if(skipKeys.has(k) || k.startsWith('__') || k.startsWith('text-') ||
          k.startsWith('proj-override-') || k.startsWith('techcard-override-') ||
-         k.startsWith('exp-override-') || k.startsWith('exp-deleted-')) continue;
-      if(typeof v === 'string' && v.startsWith('data:')) imgSlots[k] = v;
+         k.startsWith('exp-override-')  || k.startsWith('exp-deleted-')) continue;
+      if(typeof v==='string' && v.startsWith('data:image'))
+        imgSlots[k] = await compressImage(v);
     }
     if(Object.keys(imgSlots).length) state.imageSlots = imgSlots;
     return state;
@@ -1456,9 +1481,11 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       const getRes = await fetch(apiUrl,{headers});
       if(getRes.ok){ const f=await getRes.json(); sha=f.sha; }
 
+      btn.textContent='Compressing images…';
       const ts = Date.now();
-      const stateObj = buildState();
-      stateObj.savedAt = ts; // stamp save time so fetchRemote() can compare
+      const stateObj = await buildState(); // async — compresses all images first
+      stateObj.savedAt = ts;
+      btn.textContent='Uploading…';
       const content = btoa(unescape(encodeURIComponent(JSON.stringify(stateObj,null,2))));
       const body = { message:`Portfolio update ${new Date().toISOString().slice(0,10)}`, content, branch, ...(sha?{sha}:{}) };
       const putRes = await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify(body)});

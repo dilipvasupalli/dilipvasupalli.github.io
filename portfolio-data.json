@@ -11,23 +11,25 @@
       "area": "21,331 sqm",
       "role": "BIM Coordinator (Multi-Discipline)",
       "cde": "BIM 360",
-      "duration": "6 Months"
+      "duration": "6 Months",
+      "img": "portfolio-images/proj_four-seasons.jpg"
     },
     "qiddiya": {
       "name": "Qiddiya Water Park Hotel",
       "desc": "Immersive entertainment destination in Qiddiya's East Village. Conceptual inspiration drawn from Aqua Regia — adopting principles of velocity architecture where movement is embedded within the geometry of form.",
       "regionLabel": "🇸🇦 KSA",
       "region": "ksa",
-      "lod": "LOD 350",
+      "lod": "LOD 500",
       "type": "Hospitality",
       "area": "24,000 sqm",
       "role": "BIM Coordinator (Multi-Discipline) & BIM Manager",
       "cde": "BIM 360",
-      "duration": "6 Months"
+      "duration": "6 Months",
+      "img": "portfolio-images/proj_qiddiya.jpg"
     },
     "custom-1778997787585": {
       "name": "Qiddiya Gateway Hotel",
-      "desc": "—",
+      "desc": "The Qiddiya Gateway Hotel is part of the large-scale Qiddiya entertainment and hospitality development located near Riyadh, Saudi Arabia, envisioned as a key component of the Kingdom’s Vision 2030 initiative. The project is designed to support tourism, entertainment, and luxury hospitality within the Qiddiya masterplan, which includes theme parks, sports facilities, resorts, and mixed-use developments.",
       "regionLabel": "🇸🇦 KSA",
       "region": "ksa",
       "lod": "LOD 500",
@@ -40,7 +42,7 @@
     },
     "custom-1779009524658": {
       "name": "Qiddiya Wadi Hotel",
-      "desc": "—",
+      "desc": "The Qiddiya Wadi Hotel is a key hospitality component within the Janadriyah cultural district at Qiddiya, developed as part of Saudi Arabia’s Vision 2030 initiative. The project is designed to support the Janadriyah cultural destination by providing luxury hospitality experiences that reflect traditional Saudi heritage, architecture, and tourism identity within the larger Qiddiya entertainment masterplan.",
       "regionLabel": "🇸🇦 KSA",
       "region": "ksa",
       "lod": "LOD 500",
@@ -48,8 +50,164 @@
       "area": "5,293 Sq.m",
       "role": "BIM Manager",
       "cde": "ACC",
-      "duration": "3 Months",
+      "duration": "3 Months (Present)",
       "img": "portfolio-images/proj_custom-1779009524658.jpg"
+    },
+    "capella": {
+      "name": "Diriyah Capella Hotel",
+      "desc": "Located in the Northern Cultural District of the Diriyah Gate development near King Salman Square with commanding views towards the UNESCO World Heritage Site of At-Turaif and the Formula-E Racetrack.",
+      "regionLabel": "🇸🇦 KSA",
+      "region": "ksa",
+      "lod": "LOD 300",
+      "type": "Hospitality",
+      "area": "9,509 sqm",
+      "role": "BIM Coordinator (Multi-Discipline)",
+      "cde": "BIM 360",
+      "duration": "6 Months",
+      "img": "portfolio-images/proj_capella.jpg"
+    },
+    "memorial-field": {
+      "name": "Memorial Field Grandstands",
+      "desc": "Baseball stadium project encompassing architectural and structural 3D modelling with detailed design documentation. Features timber and concrete construction reflecting a coordinated and constructible design approach.",
+      "regionLabel": "🇺🇸 USA",
+      "region": "usa",
+      "lod": "LOD 300",
+      "type": "Sports",
+      "area": "Arch + Structural",
+      "role": "BIM Engineer",
+      "cde": "Navisworks",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_memorial-field.jpg"
+    },
+    "incline-hs": {
+      "name": "Incline High School",
+      "desc": "Washoe County School District expansion at Lake Tahoe. Includes a new football/soccer stadium, 2-storey athletic weight room, and a 3-storey expansion of the existing school building.",
+      "regionLabel": "🇺🇸 USA",
+      "region": "usa",
+      "lod": "LOD 300",
+      "type": "Education",
+      "area": "12,118 SF (Expansion)",
+      "role": "BIM Coordinator (Architecture)",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_incline-hs.jpg"
+    },
+    "tahoe-beach": {
+      "name": "Tahoe Beach Club",
+      "desc": "Located on the shores of Lake Tahoe adjacent to the Edgewood Tahoe resort. 13 residential buildings housing 143 luxurious condominium residences, an expansive beach club, and a private beach.",
+      "regionLabel": "🇺🇸 USA",
+      "region": "usa",
+      "lod": "LOD 300",
+      "type": "Residential",
+      "area": "191,000 SF",
+      "role": "BIM Coordinator",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_tahoe-beach.jpg"
+    },
+    "westminster": {
+      "name": "8131 Westminster Mixed-Use",
+      "desc": "14-storey mixed-use tower comprising 122 premium residential units with street-level retail and office spaces. Designed for urban professionals integrating architectural quality, functional efficiency, and long-term value.",
+      "regionLabel": "🇨🇦 Canada",
+      "region": "canada",
+      "lod": "LOD 300",
+      "type": "Mixed-Use",
+      "area": "123,723 SF · 14 Storeys",
+      "role": "BIM Coordinator (Architecture)",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_westminster.jpg"
+    },
+    "esquimalt": {
+      "name": "Esquimalt Mixed-Use Residential",
+      "desc": "198 contemporary rental apartments with street-front retail spaces offering expansive views of Esquimalt's Inner Harbour, positioned along a primary thoroughfare in the rapidly developing municipality.",
+      "regionLabel": "🇨🇦 Canada",
+      "region": "canada",
+      "lod": "LOD 300",
+      "type": "Residential",
+      "area": "75,643 SF · 198 Units",
+      "role": "BIM Coordinator (Architecture)",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_esquimalt.jpg"
+    },
+    "gorge-road": {
+      "name": "Gorge Road Residential",
+      "desc": "Mixed-use apartment development at Irma Street, Victoria, BC. 2 retail units and 152 residential apartments across two basement levels and five storeys with a central outdoor amenity space.",
+      "regionLabel": "🇨🇦 Canada",
+      "region": "canada",
+      "lod": "LOD 300",
+      "type": "Residential",
+      "area": "51,781 SF · 152 Units",
+      "role": "BIM Coordinator (Architecture)",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_gorge-road.jpg"
+    },
+    "108th-avenue": {
+      "name": "108th Avenue Multi-Family Residence",
+      "desc": "Multi-family residential building in Surrey, British Columbia. Divided into 2 twin buildings with 2 basement parking levels and 6 storeys of residential units.",
+      "regionLabel": "🇨🇦 Canada",
+      "region": "canada",
+      "lod": "LOD 300",
+      "type": "Residential",
+      "area": "60,116 SF",
+      "role": "BIM Coordinator (Architecture)",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_108th-avenue.jpg"
+    },
+    "ocean-mist": {
+      "name": "Ocean Mist Residential",
+      "desc": "Luxury residential building with ground floor parking and 5-storey residential spaces. Local code compliance integrated throughout the architectural design and BIM coordination workflow.",
+      "regionLabel": "🇨🇦 Canada",
+      "region": "canada",
+      "lod": "LOD 300",
+      "type": "Residential",
+      "area": "72,150 SF",
+      "role": "BIM Coordinator (Architecture)",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_ocean-mist.jpg"
+    },
+    "kingsway": {
+      "name": "Kingsway Avenue Residence",
+      "desc": "Multi-family residential apartments in Port Coquitlam, British Columbia. 2 basement parking levels and 6-storey residential units with full BIM coordination.",
+      "regionLabel": "🇨🇦 Canada",
+      "region": "canada",
+      "lod": "LOD 300",
+      "type": "Residential",
+      "area": "102,873 SF",
+      "role": "BIM Coordinator (Architecture)",
+      "cde": "BIM 360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_kingsway.jpg"
+    },
+    "custom-1778859714123": {
+      "name": "Vabi RowHouses",
+      "desc": "The Vabi Rowhouses development in the Netherlands represents a modern approach to sustainable residential urban planning, where BIM (Building Information Modelling) methodologies are integrated to improve design coordination, energy efficiency, and construction management. Dutch rowhouse developments are widely recognized for combining compact urban living with high environmental performance and standardized modular construction systems.",
+      "regionLabel": "🌍 Europe",
+      "region": "europe",
+      "lod": "LOD 300",
+      "type": "Residential",
+      "area": "15,000 Sq.m",
+      "role": "BIM Engineer",
+      "cde": "BIM360",
+      "duration": "1 Year",
+      "img": "portfolio-images/proj_custom-1778859714123.jpg"
+    },
+    "custom-1778860502340": {
+      "name": "Convento Corpus Christi",
+      "desc": "The Convento Corpus Christi refurbishment project in Portugal involved the digital preservation and renovation of a historic heritage structure using advanced BIM and laser scanning methodologies. The project utilized a Scan-to-BIM workflow, where terrestrial laser scanning technology was employed to capture highly accurate point cloud data of the existing convent geometry, including irregular walls, vaulted ceilings, historical architectural elements, and structural conditions. This digital survey approach significantly improved accuracy compared to conventional manual measurement methods",
+      "regionLabel": "🌍 Europe",
+      "region": "europe",
+      "lod": "LOD 500",
+      "type": "Other",
+      "area": "25,000 Sq.m",
+      "role": "BIM Coordinator",
+      "cde": "BIM360",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_custom-1778860502340.jpg"
     }
   },
   "techCardOverrides": {
@@ -158,6 +316,31 @@
       "cde": "ACC",
       "duration": "3 Months",
       "imgData": "portfolio-images/cp_1779009524658.jpg"
+    },
+    {
+      "id": 1779012248011,
+      "region": "usa",
+      "regionLabel": "🇺🇸 USA",
+      "name": "Stevenson University - Library",
+      "type": "Education",
+      "lod": "LOD 350",
+      "desc": "The Philip A. Zaffere Library is a vital part of campus life, supporting students through study, research, and academic success. Located on the Owings Mills North campus and connected to the Manning Academic Center and School of Design",
+      "area": "42,000 Sq.ft",
+      "role": "BIM Coordinator",
+      "cde": "BIM360",
+      "duration": "4 Months",
+      "imgData": "portfolio-images/cp_1779012248011.jpg"
+    }
+  ],
+  "customCerts": [
+    {
+      "id": 1779012669772,
+      "name": "IS019650",
+      "issuer": "Operam Academy",
+      "date": "2023",
+      "credId": "",
+      "desc": "",
+      "imgData": "portfolio-images/cc_1779012669772.jpg"
     }
   ],
   "imageSlots": {
@@ -177,7 +360,25 @@
     "custom-1778860502340": "portfolio-images/custom-1778860502340.jpg",
     "clash-3": "portfolio-images/clash-3.jpg",
     "custom-1778996788107": "portfolio-images/custom-1778996788107.jpg",
-    "custom-1778997787585": "portfolio-images/cp_1778997787585.jpg"
+    "custom-1778997787585": "portfolio-images/cp_1778997787585.jpg",
+    "custom-1779012248011": "portfolio-images/cp_1779012248011.jpg",
+    "clash-1": "portfolio-images/clash-1.jpg",
+    "clash-2": "portfolio-images/clash-2.jpg",
+    "clash-4": "portfolio-images/clash-4.jpg",
+    "pbi-1": "portfolio-images/pbi-1.jpg",
+    "pbi-2": "portfolio-images/pbi-2.jpg",
+    "pbi-3": "portfolio-images/pbi-3.jpg",
+    "pbi-4": "portfolio-images/pbi-4.jpg",
+    "pbi-5": "portfolio-images/pbi-5.jpg",
+    "dynamo-1": "portfolio-images/dynamo-1.jpg",
+    "dynamo-2": "portfolio-images/dynamo-2.jpg",
+    "dynamo-3": "portfolio-images/dynamo-3.jpg",
+    "dynamo-4": "portfolio-images/dynamo-4.jpg",
+    "fam-1": "portfolio-images/fam-1.jpg",
+    "fam-2": "portfolio-images/fam-2.jpg",
+    "cert-rics": "portfolio-images/cert-rics.jpg",
+    "cert-p1": "portfolio-images/cert-p1.jpg",
+    "cert-custom-1779012669772": "portfolio-images/cc_1779012669772.jpg"
   },
-  "savedAt": 1779011351775
+  "savedAt": 1779012743515
 }

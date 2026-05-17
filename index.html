@@ -1400,16 +1400,28 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       const data = await r.json();
       if(!data?.version){ if(toast) toast.classList.remove('show'); return; }
       sessionStorage.setItem(GH_FETCHED,'1'); // mark done for this session
-      // ── Timestamp guard ──
-      // Only apply remote data if it's actually newer than what we last saved from here.
-      // This prevents overwriting unsaved local edits when the user just refreshes.
-      const localSyncedAt  = getStore().__ghSyncedAt || 0;
-      const remoteSavedAt  = data.savedAt || 0;
-      if(remoteSavedAt && remoteSavedAt <= localSyncedAt){
-        // Already have this snapshot (or a newer one) in localStorage — nothing to do
-        if(toast) toast.classList.remove('show');
-        return;
+      // ── Sync guard — three rules ──────────────────────────────────────────
+      // Rule 1: Browser has local data it has never saved to GitHub
+      //         → protect unsaved changes, do NOT overwrite
+      // Rule 2: Remote data is old-format (no savedAt) and we already have data
+      //         → same as Rule 1, skip
+      // Rule 3: Remote timestamp ≤ last time we synced from here
+      //         → we already have this version (or newer), skip
+      // Only applies (downloads) when browser is truly fresh (empty localStorage)
+      // or when a genuinely newer save exists on GitHub (e.g. from another device).
+      const s0 = getStore();
+      const localSyncedAt = s0.__ghSyncedAt || 0;
+      const remoteSavedAt = data.savedAt || 0;
+      const hasLocalData  = Object.keys(s0).some(k => !k.startsWith('__'));
+      if(hasLocalData && !localSyncedAt){
+        // Rule 1 & 2: unsaved local data — keep it
+        if(toast) toast.classList.remove('show'); return;
       }
+      if(remoteSavedAt && remoteSavedAt <= localSyncedAt){
+        // Rule 3: already have this snapshot
+        if(toast) toast.classList.remove('show'); return;
+      }
+      // ─────────────────────────────────────────────────────────────────────
       applyState(data);
       // Re-render in place — no page reload needed
       if(typeof rehydrateFromStore==='function') rehydrateFromStore();

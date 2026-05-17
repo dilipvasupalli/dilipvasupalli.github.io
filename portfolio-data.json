@@ -2,7 +2,8 @@
   "version": 2,
   "textOverrides": {
     "stat-countries": "8+",
-    "stat-projects": "25+"
+    "stat-projects": "25+",
+    "about-bio-1": "I am a BIM professional with more than nine years of industry experience, currently operating as a BIM Manager at DSA Architects International in Riyadh, Saudi Arabia. My expertise spans multi-disciplinary BIM coordination, clash management, and the strategic implementation of digital information workflows to support efficient, compliant, and high-quality project delivery."
   },
   "projectOverrides": {
     "four-seasons": {
@@ -442,5 +443,5 @@
       "review": "Dilip is a dedicated BIM professional with a strong understanding of project requirements and digital construction workflows. His ability to coordinate with multiple stakeholders and deliver tasks efficiently makes him a valuable asset to any BIM team."
     }
   ],
-  "savedAt": 1779038167681
+  "savedAt": 1779046119882
 }

@@ -226,6 +226,10 @@
     "clash-3": {
       "title": "Issues Creation for Unresolved Clashes",
       "desc": "Creating issues for unresolved clashes discussed over every weekly BIM Coordination meetings."
+    },
+    "sk-1779027113420": {
+      "title": "MEP Service Openings",
+      "desc": "Create openings on walls for MEP services like Ducts, Pipes, cable trays etc. with Revit links."
     }
   },
   "expOverrides": {
@@ -332,15 +336,29 @@
       "imgData": "portfolio-images/cp_1779012248011.jpg"
     }
   ],
+  "customSkills": [
+    {
+      "id": 1779027113420,
+      "title": "MEP Service Openings",
+      "desc": "Create openings on walls for MEP services like Ducts, Pipes, cable trays etc. with Revit links.",
+      "tab": "clash"
+    },
+    {
+      "id": 1779027242459,
+      "title": "Wall Openings for MEP Services",
+      "desc": "Create openings on walls for MEP services like Ducts, Pipes, cable trays etc. with Revit links.",
+      "tab": "cat-1779027022591"
+    }
+  ],
   "customCerts": [
     {
-      "id": 1779012669772,
-      "name": "IS019650",
+      "id": 1779018359347,
+      "name": "ISO 19650 Professional",
       "issuer": "Operam Academy",
       "date": "2023",
       "credId": "",
       "desc": "",
-      "imgData": "portfolio-images/cc_1779012669772.jpg"
+      "imgData": "portfolio-images/cc_1779018359347.jpg"
     }
   ],
   "imageSlots": {
@@ -377,8 +395,26 @@
     "fam-1": "portfolio-images/fam-1.jpg",
     "fam-2": "portfolio-images/fam-2.jpg",
     "cert-rics": "portfolio-images/cert-rics.jpg",
-    "cert-p1": "portfolio-images/cert-p1.jpg"
+    "cert-p1": "portfolio-images/cert-p1.jpg",
+    "cert-custom-1779018359347": "portfolio-images/cc_1779018359347.jpg"
   },
+  "customTechCategories": [
+    {
+      "id": "cat-1779027022591",
+      "name": "Revit API Automation",
+      "intro": ""
+    }
+  ],
+  "staticCertOverrides": {
+    "placeholder-1": {
+      "issuer": "Autodesk",
+      "name": "Autodesk Certified Professional: Revit",
+      "date": "2017"
+    }
+  },
+  "deletedStaticCerts": [
+    "placeholder-2"
+  ],
   "endorsements": [
     {
       "id": 1779017184797,
@@ -409,5 +445,5 @@
       "review": "--"
     }
   ],
-  "savedAt": 1779018205507
+  "savedAt": 1779027278011
 }

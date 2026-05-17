@@ -24,6 +24,32 @@
       "role": "BIM Coordinator (Multi-Discipline) & BIM Manager",
       "cde": "BIM 360",
       "duration": "6 Months"
+    },
+    "custom-1778997787585": {
+      "name": "Qiddiya Gateway Hotel",
+      "desc": "—",
+      "regionLabel": "🇸🇦 KSA",
+      "region": "ksa",
+      "lod": "LOD 500",
+      "type": "Hospitality",
+      "area": "10,847 Sq.m",
+      "role": "BIM Manager",
+      "cde": "ACC",
+      "duration": "3 Months (Present)",
+      "img": "portfolio-images/proj_custom-1778997787585.jpg"
+    },
+    "custom-1779009524658": {
+      "name": "Qiddiya Wadi Hotel",
+      "desc": "—",
+      "regionLabel": "🇸🇦 KSA",
+      "region": "ksa",
+      "lod": "LOD 500",
+      "type": "Hospitality",
+      "area": "5,293 Sq.m",
+      "role": "BIM Manager",
+      "cde": "ACC",
+      "duration": "3 Months",
+      "img": "portfolio-images/proj_custom-1779009524658.jpg"
     }
   },
   "techCardOverrides": {
@@ -151,8 +177,7 @@
     "custom-1778860502340": "portfolio-images/custom-1778860502340.jpg",
     "clash-3": "portfolio-images/clash-3.jpg",
     "custom-1778996788107": "portfolio-images/custom-1778996788107.jpg",
-    "custom-1778997787585": "portfolio-images/cp_1778997787585.jpg",
-    "custom-1779009524658": "portfolio-images/cp_1779009524658.jpg"
+    "custom-1778997787585": "portfolio-images/cp_1778997787585.jpg"
   },
-  "savedAt": 1779009558861
+  "savedAt": 1779011318860
 }

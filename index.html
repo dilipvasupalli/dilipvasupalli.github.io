@@ -394,6 +394,35 @@ body:not(.edit-mode) .btn-add-endorse{display:none!important}
 body.edit-mode .endorse-card:hover .endorse-edit-btn{display:flex}
 .endorse-edit-btn:hover{background:var(--rose);border-color:var(--rose);color:var(--navy)}
 .endorse-edit-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ════════════════════════════════════════ TECH CARD — DELETE IN EDIT MODE */
+body.edit-mode .tech-card .delete-btn{opacity:1}
+
+/* ════════════════════════════════════════ ENDORSEMENTS CAROUSEL */
+.endorse-carousel-outer{position:relative;overflow:hidden;padding:0 .5rem}
+.endorse-grid{display:flex;gap:1.75rem;transition:transform .45s cubic-bezier(.4,0,.2,1);will-change:transform}
+.endorse-card{flex:0 0 calc(33.333% - 1.17rem);min-width:0}
+.endorse-nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--white);border:1px solid var(--border);color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:20;transition:var(--ease);box-shadow:0 3px 14px rgba(24,23,20,.12)}
+.endorse-nav-btn:hover:not(:disabled){background:var(--rose);border-color:var(--rose)}
+.endorse-nav-btn:disabled{opacity:.28;cursor:default;pointer-events:none}
+.endorse-nav-prev{left:-20px}
+.endorse-nav-next{right:-20px}
+.endorse-nav-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;flex-shrink:0}
+.endorse-dots{display:flex;justify-content:center;gap:.55rem;margin-top:1.5rem}
+.endorse-dot{width:7px;height:7px;border-radius:50%;background:var(--border);border:none;cursor:pointer;transition:var(--ease);padding:0}
+.endorse-dot.active{background:var(--rose);transform:scale(1.35)}
+@media(max-width:860px){.endorse-card{flex:0 0 calc(50% - .875rem)}}
+@media(max-width:560px){.endorse-card{flex:0 0 100%}}
+
+/* ════════════════════════════════════════ LIGHTBOX */
+#lightboxBackdrop{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease}
+#lightboxBackdrop.open{opacity:1;pointer-events:all}
+#lightboxImg{max-width:90vw;max-height:86vh;object-fit:contain;display:none;border-radius:2px;box-shadow:0 16px 80px rgba(0,0,0,.7)}
+#lightboxVid{max-width:90vw;max-height:86vh;display:none;border-radius:2px;background:#000}
+#lightboxClose{position:fixed;top:1.1rem;right:1.1rem;width:40px;height:40px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:50%;color:#fff;font-size:1.35rem;cursor:pointer;z-index:2001;display:flex;align-items:center;justify-content:center;line-height:1;transition:background .2s}
+#lightboxClose:hover{background:rgba(255,255,255,.3)}
+/* Zoom cursor on media (view mode only) */
+body:not(.edit-mode) .img-wrap img,body:not(.edit-mode) .media-wrap img,body:not(.edit-mode) .media-wrap video{cursor:zoom-in}
 </style>
 </head>
 <body>
@@ -1065,9 +1094,16 @@ body.edit-mode .endorse-card:hover .endorse-edit-btn{display:flex}
         Add Endorsement
       </button>
     </div>
-    <div class="endorse-grid" id="endorseGrid">
-      <!-- filled dynamically by JS -->
+    <div class="endorse-carousel-outer fade-in">
+      <button class="endorse-nav-btn endorse-nav-prev" id="endorsePrev" disabled aria-label="Previous">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="endorse-grid" id="endorseGrid"></div>
+      <button class="endorse-nav-btn endorse-nav-next" id="endorseNext" aria-label="Next">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
     </div>
+    <div class="endorse-dots" id="endorseDots"></div>
   </div>
 </section>
 
@@ -2603,6 +2639,8 @@ function restoreTechCards(){
     panel.querySelector('.tech-grid').appendChild(card);
     fadeObs.observe(card);
   });
+  // Re-run image restore so videos/images on custom skill cards load correctly
+  restoreImages();
 }
 restoreTechCards();
 
@@ -2993,17 +3031,58 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
 })();
 
 /* ══════════════════════════════════════
-   ENDORSEMENTS — ADD / EDIT / DELETE
+   ENDORSEMENTS — ADD / EDIT / DELETE + CAROUSEL
    ══════════════════════════════════════ */
 (()=>{
   const endorseBackdrop=document.getElementById('endorseModalBackdrop');
   const endorseGrid    =document.getElementById('endorseGrid');
   const btnAddEndorse  =document.getElementById('btnAddEndorse');
   let editingEndorseId =null;
+  let carouselIndex    =0;
 
+  /* ── Carousel ── */
+  function cardsPerView(){
+    const w=window.innerWidth;
+    return w>860?3:(w>560?2:1);
+  }
+  function updateCarousel(){
+    const cards=[...endorseGrid.querySelectorAll('.endorse-card')];
+    const N=cards.length;
+    if(N===0){ document.getElementById('endorseDots').innerHTML=''; return; }
+    const cpv=cardsPerView();
+    const outer=endorseGrid.parentElement;
+    const gap=28; // 1.75rem
+    const cardW=(outer.clientWidth-gap*(cpv-1))/cpv;
+    const step=cardW+gap;
+    const maxIdx=Math.max(0,N-cpv);
+    carouselIndex=Math.min(carouselIndex,maxIdx);
+    endorseGrid.style.transform=`translateX(-${carouselIndex*step}px)`;
+    const prev=document.getElementById('endorsePrev');
+    const next=document.getElementById('endorseNext');
+    if(prev) prev.disabled=carouselIndex===0;
+    if(next) next.disabled=carouselIndex>=maxIdx;
+    // Dots
+    const dotsEl=document.getElementById('endorseDots');
+    if(dotsEl){
+      dotsEl.innerHTML='';
+      if(N>cpv){
+        for(let i=0;i<=maxIdx;i++){
+          const d=document.createElement('button');
+          d.className='endorse-dot'+(i===carouselIndex?' active':'');
+          d.addEventListener('click',()=>{ carouselIndex=i; updateCarousel(); });
+          dotsEl.appendChild(d);
+        }
+      }
+    }
+  }
+  document.getElementById('endorsePrev')?.addEventListener('click',()=>{ carouselIndex=Math.max(0,carouselIndex-1); updateCarousel(); });
+  document.getElementById('endorseNext')?.addEventListener('click',()=>{ carouselIndex++; updateCarousel(); });
+  window.addEventListener('resize',()=>updateCarousel());
+
+  /* ── Build card ── */
   function buildEndorseCard(e){
     const card=document.createElement('div');
-    card.className='endorse-card fade-in'; card.dataset.eid=e.id;
+    card.className='endorse-card'; card.dataset.eid=e.id;
     card.innerHTML=`
       <div class="endorse-quote">&ldquo;</div>
       <p class="endorse-review">${e.review||''}</p>
@@ -3011,7 +3090,7 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
       <div class="endorse-name">${e.name||''}</div>
       <div class="endorse-role">${[e.designation,e.company].filter(Boolean).join(' · ')}</div>
       <button class="endorse-edit-btn" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-      <button class="delete-btn" title="Remove endorsement">×</button>`;
+      <button class="delete-btn" title="Remove">×</button>`;
     card.querySelector('.endorse-edit-btn').addEventListener('click',ev=>{
       ev.stopPropagation();
       editingEndorseId=e.id;
@@ -3027,13 +3106,13 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
       ev.stopPropagation();
       if(!confirm(`Remove endorsement from ${e.name}?`)) return;
       card.remove();
-      const s=getStore();
-      s.endorsements=(s.endorsements||[]).filter(x=>x.id!==e.id);
-      setStore(s);
+      const s=getStore(); s.endorsements=(s.endorsements||[]).filter(x=>x.id!==e.id); setStore(s);
+      carouselIndex=0; updateCarousel();
     });
     return card;
   }
 
+  /* ── Modal ── */
   function openEndorseModal(){
     editingEndorseId=null;
     ['ef-endorse-name','ef-endorse-desig','ef-endorse-company','ef-endorse-review'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
@@ -3041,7 +3120,6 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
     document.getElementById('endorseBtnSubmit').textContent='Add Endorsement';
     endorseBackdrop.classList.add('open');
   }
-
   btnAddEndorse?.addEventListener('click',openEndorseModal);
   document.getElementById('endorseModalClose')?.addEventListener('click',()=>endorseBackdrop.classList.remove('open'));
   document.getElementById('endorseBtnCancel')?.addEventListener('click',()=>endorseBackdrop.classList.remove('open'));
@@ -3052,8 +3130,7 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
     const review=document.getElementById('ef-endorse-review').value.trim();
     if(!name||!review){ alert('Please enter the name and review text.'); return; }
     const data={
-      id:editingEndorseId||Date.now(),
-      name,
+      id:editingEndorseId||Date.now(), name,
       designation:document.getElementById('ef-endorse-desig').value.trim(),
       company:    document.getElementById('ef-endorse-company').value.trim(),
       review
@@ -3065,29 +3142,81 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
         card.querySelector('.endorse-name').textContent  =data.name;
         card.querySelector('.endorse-role').textContent  =[data.designation,data.company].filter(Boolean).join(' · ');
       }
-      const s=getStore();
-      const idx=(s.endorsements||[]).findIndex(x=>x.id===editingEndorseId);
+      const s=getStore(); const idx=(s.endorsements||[]).findIndex(x=>x.id===editingEndorseId);
       if(idx>=0) s.endorsements[idx]=data; setStore(s);
     } else {
       const card=buildEndorseCard(data);
       endorseGrid.appendChild(card);
-      fadeObs.observe(card);
-      const s=getStore();
-      s.endorsements=[...(s.endorsements||[]),data]; setStore(s);
+      const s=getStore(); s.endorsements=[...(s.endorsements||[]),data]; setStore(s);
+      setTimeout(updateCarousel,50);
     }
     endorseBackdrop.classList.remove('open');
   });
 
+  /* ── Restore ── */
   window.restoreEndorsements=function(){
     const s=getStore();
     (s.endorsements||[]).forEach(e=>{
       if(endorseGrid.querySelector(`[data-eid="${e.id}"]`)) return;
-      const card=buildEndorseCard(e);
-      endorseGrid.appendChild(card);
-      fadeObs.observe(card);
+      endorseGrid.appendChild(buildEndorseCard(e));
     });
+    setTimeout(updateCarousel,80);
   };
   restoreEndorsements();
+})();
+
+/* ══════════════════════════════════════
+   LIGHTBOX — click to expand images & videos
+   ══════════════════════════════════════ */
+(()=>{
+  const lbBackdrop=document.getElementById('lightboxBackdrop');
+  const lbImg     =document.getElementById('lightboxImg');
+  const lbVid     =document.getElementById('lightboxVid');
+
+  function openLightbox(src, isVideo){
+    if(!src||src===window.location.href) return;
+    if(isVideo){
+      lbVid.src=src; lbVid.style.display=''; lbImg.style.display='none';
+      lbVid.play().catch(()=>{});
+    } else {
+      lbImg.src=src; lbImg.style.display=''; lbVid.style.display='none';
+      lbVid.pause(); lbVid.src='';
+    }
+    lbBackdrop.classList.add('open');
+  }
+  function closeLightbox(){
+    lbBackdrop.classList.remove('open');
+    lbVid.pause(); lbVid.src='';
+    setTimeout(()=>{ lbImg.src=''; },300);
+  }
+
+  document.getElementById('lightboxClose')?.addEventListener('click',closeLightbox);
+  lbBackdrop.addEventListener('click',e=>{ if(e.target===lbBackdrop) closeLightbox(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
+
+  // Event delegation — intercept clicks on project/tech media in VIEW mode only
+  document.addEventListener('click',e=>{
+    if(document.body.classList.contains('edit-mode')) return;
+
+    // Image click inside .img-wrap or .media-wrap
+    if(e.target.tagName==='IMG'){
+      const wrap=e.target.closest('.img-wrap,.media-wrap');
+      if(!wrap) return;
+      // Skip modal preview images
+      if(e.target.id==='modalImgPreview'||e.target.id==='certImgPreview') return;
+      const src=e.target.src||e.target.currentSrc;
+      if(src && src!==window.location.href && !src.endsWith('#')) openLightbox(src,false);
+      return;
+    }
+
+    // Video click inside .media-wrap — open in lightbox
+    if(e.target.tagName==='VIDEO'){
+      const wrap=e.target.closest('.media-wrap');
+      if(!wrap) return;
+      const src=e.target.src||e.target.currentSrc;
+      if(src){ e.target.pause(); openLightbox(src,true); }
+    }
+  }, true); // capture phase so it fires before video default behaviour
 })();
 
 function resetForm(){
@@ -3102,6 +3231,13 @@ function resetForm(){
   pendingImgData=null;
 }
 </script>
+<!-- ══════════════ LIGHTBOX ══════════════ -->
+<div id="lightboxBackdrop">
+  <button id="lightboxClose" title="Close (Esc)">×</button>
+  <img id="lightboxImg" src="" alt="Expanded view">
+  <video id="lightboxVid" controls playsinline></video>
+</div>
+
 <!-- Sync toast (shown while loading remote data) -->
 <div id="syncToast">
   <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>

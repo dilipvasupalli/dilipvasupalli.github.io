@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "textOverrides": {
+    "stat-countries": "8+",
+    "stat-projects": "25+"
+  },
   "projectOverrides": {
     "four-seasons": {
       "name": "Diriyah Four Seasons Hotel",
@@ -398,6 +402,12 @@
     "cert-p1": "portfolio-images/cert-p1.jpg",
     "cert-custom-1779018359347": "portfolio-images/cc_1779018359347.jpg"
   },
+  "addedSkillTags": [
+    "Laser Scanning",
+    "4D Simulations",
+    "5D Cost & Quantity Takeoff",
+    "RevitAPI & NavisworksAPI"
+  ],
   "customTechCategories": [
     {
       "id": "cat-1779027022591",
@@ -421,7 +431,7 @@
       "name": "Venkata Shiva Teja Katta",
       "designation": "BIM Manager",
       "company": "Shapoorji & Pallonji Constructions",
-      "review": "--"
+      "review": "Dilip performs exceptionally well at work, consistently completing all tasks on time and demonstrating strong automation skills. \n\nReliable and highly talented, he can do best in any role."
     },
     {
       "id": 1779017216898,
@@ -445,5 +455,5 @@
       "review": "--"
     }
   ],
-  "savedAt": 1779027278011
+  "savedAt": 1779027719037
 }

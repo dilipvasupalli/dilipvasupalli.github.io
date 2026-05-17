@@ -1402,35 +1402,23 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       const data = await r.json();
       if(!data?.version){ if(toast) toast.classList.remove('show'); return; }
       sessionStorage.setItem(GH_FETCHED,'1'); // mark done for this session
-      // ── Sync guard — three rules ──────────────────────────────────────────
-      // Rule 1: Browser has local data it has never saved to GitHub
-      //         → protect unsaved changes, do NOT overwrite
-      // Rule 2: Remote data is old-format (no savedAt) and we already have data
-      //         → same as Rule 1, skip
-      // Rule 3: Remote timestamp ≤ last time we synced from here
-      //         → we already have this version (or newer), skip
-      // Only applies (downloads) when browser is truly fresh (empty localStorage)
-      // or when a genuinely newer save exists on GitHub (e.g. from another device).
+
       const s0 = getStore();
       const localSyncedAt = s0.__ghSyncedAt || 0;
       const remoteSavedAt = data.savedAt || 0;
-      const hasLocalData  = Object.keys(s0).some(k => !k.startsWith('__'));
-      if(hasLocalData && !localSyncedAt){
-        // Rule 1 & 2: unsaved local data — keep it
-        if(toast) toast.classList.remove('show'); return;
-      }
+
+      // Skip only when we already have this exact snapshot or a newer one.
+      // If localSyncedAt is 0 (never synced) OR remoteSavedAt is newer → apply.
       if(remoteSavedAt && remoteSavedAt <= localSyncedAt){
-        // Rule 3: already have this snapshot
         if(toast) toast.classList.remove('show'); return;
       }
-      // ─────────────────────────────────────────────────────────────────────
+
       applyState(data);
-      // Re-render in place — no page reload needed
       if(typeof rehydrateFromStore==='function') rehydrateFromStore();
       if(toast){ toast.classList.add('done'); toastMsg.textContent='✓ Changes loaded'; }
       setTimeout(()=>{ if(toast) toast.classList.remove('show','done'); }, 2500);
     }catch(e){
-      if(toast) toast.classList.remove('show'); // network error — don't set flag, will retry next session
+      if(toast) toast.classList.remove('show');
     }
   }
   fetchRemote();
@@ -1541,7 +1529,27 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
       setTimeout(()=>{ btn.textContent=orig; btn.disabled=false; },2800);
     }catch(e){
       btn.textContent=orig; btn.disabled=false;
-      alert('GitHub save failed:\n'+e.message+'\n\nCheck your token and repository name in ⚙ settings.');
+      const msg = e.message||'';
+      // Auth/permission errors → open config dialog so user can update their token
+      if(msg.includes('401')||msg.includes('Bad credentials')||msg.includes('403')||msg.includes('token')){
+        const cfgBackdrop = document.getElementById('ghConfigBackdrop');
+        const cfg = getGHCfg();
+        document.getElementById('gh-repo').value     = cfg.repo||'dilipvasupalli/dilipvasupalli.github.io';
+        document.getElementById('gh-branch').value   = cfg.branch||'main';
+        document.getElementById('gh-filepath').value = 'portfolio-data.json';
+        document.getElementById('gh-pat').value      = '';
+        cfgBackdrop.dataset.pendingSave = '1';
+        cfgBackdrop.classList.add('open');
+        // Show hint inside the dialog
+        const hint = cfgBackdrop.querySelector('.gh-auth-hint')||document.createElement('p');
+        hint.className='gh-auth-hint';
+        hint.style.cssText='color:#c0392b;font-size:.82rem;margin-top:10px;padding:8px 12px;background:#fde8e8;border-radius:6px';
+        hint.textContent='⚠ Save failed: token is expired or invalid. Paste your new GitHub PAT here and click Save.';
+        const actions = cfgBackdrop.querySelector('.modal-actions')||cfgBackdrop.querySelector('form');
+        if(actions&&!cfgBackdrop.querySelector('.gh-auth-hint')) actions.before(hint);
+      } else {
+        alert('GitHub save failed:\n'+msg+'\n\nOpen ⚙ settings to check your token and repository name.');
+      }
     }
   }
 

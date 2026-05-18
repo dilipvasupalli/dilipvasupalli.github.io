@@ -68,8 +68,7 @@
       "area": "9,509 sqm",
       "role": "BIM Coordinator (Multi-Discipline)",
       "cde": "BIM 360",
-      "duration": "6 Months",
-      "img": "portfolio-images/proj_capella.jpg"
+      "duration": "6 Months"
     },
     "memorial-field": {
       "name": "Memorial Field Grandstands",
@@ -341,14 +340,6 @@
       "imgData": "portfolio-images/cp_1779012248011.jpg"
     }
   ],
-  "customSkills": [
-    {
-      "id": 1779027113420,
-      "title": "MEP Service Openings",
-      "desc": "Create openings on walls for MEP services like Ducts, Pipes, cable trays etc. with Revit links.",
-      "tab": "clash"
-    }
-  ],
   "customCerts": [
     {
       "id": 1779018359347,
@@ -443,5 +434,5 @@
       "review": "Dilip is a dedicated BIM professional with a strong understanding of project requirements and digital construction workflows. His ability to coordinate with multiple stakeholders and deliver tasks efficiently makes him a valuable asset to any BIM team."
     }
   ],
-  "savedAt": 1779046119882
+  "savedAt": 1779083030310
 }

@@ -343,6 +343,22 @@ body.edit-mode .edit-lock-btn{background:var(--rose);border-color:var(--rose);co
 #syncToast.done svg{animation:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ════════════════════════════════════════ EDUCATION — EDIT CONTROLS */
+.edu-cards{position:relative}
+.edu-card{position:relative}
+.edu-card-controls{position:absolute;top:6px;right:6px;display:none;gap:4px;z-index:10}
+body.edit-mode .edu-card-controls{display:flex}
+.edu-ctrl-btn{width:24px;height:24px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--ease)}
+.edu-ctrl-edit{background:rgba(24,23,20,.75);color:var(--cream)}
+.edu-ctrl-edit:hover{background:var(--rose);color:var(--navy)}
+.edu-ctrl-del{background:rgba(192,57,43,.75);color:#fff}
+.edu-ctrl-del:hover{background:rgba(192,57,43,1)}
+.edu-ctrl-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+.btn-add-edu{display:none;align-items:center;gap:.4rem;margin-top:.9rem;padding:.5rem 1.2rem;background:transparent;border:1px dashed var(--rose);color:var(--rose);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif}
+.btn-add-edu:hover{background:rgba(200,169,126,.12)}
+.btn-add-edu svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+body.edit-mode .btn-add-edu{display:inline-flex}
+
 /* ════════════════════════════════════════ SKILL TAGS — EDIT */
 .btn-add-skill-tag{display:none;align-items:center;gap:.4rem;padding:.35rem .9rem;background:transparent;border:1px dashed var(--rose);color:var(--rose);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:var(--ease);font-family:'Nunito',sans-serif}
 .btn-add-skill-tag:hover{background:rgba(200,169,126,.12)}
@@ -423,6 +439,10 @@ body.edit-mode .tech-card .delete-btn{opacity:1}
 #lightboxClose:hover{background:rgba(255,255,255,.3)}
 /* Zoom cursor on media (view mode only) */
 body:not(.edit-mode) .img-wrap img,body:not(.edit-mode) .media-wrap img,body:not(.edit-mode) .media-wrap video{cursor:zoom-in}
+/* Hide upload placeholder text and block interactions for non-admin visitors */
+body:not(.edit-mode) .media-wrap.empty .media-placeholder-inner{display:none!important}
+body:not(.edit-mode) .media-wrap.empty{pointer-events:none!important;cursor:default!important}
+body:not(.edit-mode) .media-wrap.empty .upload-overlay{display:none!important}
 </style>
 </head>
 <body>
@@ -503,18 +523,27 @@ body:not(.edit-mode) .img-wrap img,body:not(.edit-mode) .media-wrap img,body:not
           <div class="stat-card"><div class="stat-number" data-editable data-key="stat-countries">5+</div><div class="stat-label" data-editable data-key="stat-countries-lbl">Countries</div></div>
           <div class="stat-card"><div class="stat-number" data-editable data-key="stat-companies">4</div><div class="stat-label" data-editable data-key="stat-companies-lbl">Companies</div></div>
         </div>
-        <div class="edu-cards fade-in">
-          <div class="edu-card">
+        <div class="edu-cards fade-in" id="eduCards">
+          <div class="edu-card" data-edu-id="edu1">
+            <div class="edu-card-controls">
+              <button class="edu-ctrl-btn edu-ctrl-edit" title="Edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="edu-ctrl-btn edu-ctrl-del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+            </div>
             <div class="edu-year">2024 – 2025</div>
             <div class="edu-degree">BIM – Project Management</div>
             <div class="edu-school">Royal Institute of Chartered Surveyors (RICS)</div>
           </div>
-          <div class="edu-card">
+          <div class="edu-card" data-edu-id="edu2">
+            <div class="edu-card-controls">
+              <button class="edu-ctrl-btn edu-ctrl-edit" title="Edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="edu-ctrl-btn edu-ctrl-del" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+            </div>
             <div class="edu-year">2013 – 2017</div>
             <div class="edu-degree">B.Tech Civil Engineering</div>
             <div class="edu-school">Vignan's Institute of Information Technology, A.P, India</div>
           </div>
         </div>
+        <button class="btn-add-edu" id="btnAddEdu"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Education</button>
       </div>
     </div>
   </div>
@@ -1114,7 +1143,7 @@ body:not(.edit-mode) .img-wrap img,body:not(.edit-mode) .media-wrap img,body:not
       <span class="section-label">Get In Touch</span>
       <h2 class="section-title">Contact</h2>
       <div class="section-line"></div>
-      <p class="contact-bio">Available for senior BIM management roles, digital delivery consultancy, and international project engagements. Based in Riyadh, Saudi Arabia — open to global opportunities.</p>
+      <p class="contact-bio" data-editable data-key="contact-bio">Available for senior BIM management roles, digital delivery consultancy, and international project engagements. Based in Riyadh, Saudi Arabia — open to global opportunities.</p>
       <div class="contact-links">
         <a href="mailto:dilipvasupalli@gmail.com" class="contact-link">
           <div class="contact-link-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
@@ -1498,6 +1527,35 @@ body:not(.edit-mode) .img-wrap img,body:not(.edit-mode) .media-wrap img,body:not
   </div>
 </div>
 
+<!-- ══════════════ ADD / EDIT EDUCATION MODAL ══════════════ -->
+<div class="modal-backdrop" id="eduModalBackdrop">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" id="eduModalClose">×</button>
+    <h3 class="modal-title" id="eduModalTitle">Add Education</h3>
+    <p class="modal-subtitle">Add a degree, diploma, or professional qualification.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Year / Period *</label>
+        <input type="text" id="eduf-year" placeholder="e.g. 2013 – 2017">
+      </div>
+      <div class="form-group">
+        <label>Degree / Qualification *</label>
+        <input type="text" id="eduf-degree" placeholder="e.g. B.Tech Civil Engineering">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Institution</label>
+        <input type="text" id="eduf-school" placeholder="e.g. University of Sydney">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="eduBtnCancel">Cancel</button>
+      <button class="btn-submit" id="eduBtnSubmit">Add Education</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ JAVASCRIPT ══════════════ -->
 <script>
 const STORE_KEY = 'dv_portfolio_v2';
@@ -1522,19 +1580,21 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
   function buildState(){
     const s = getStore();
     const state = { version:2 };
-    const txt={}, proj={}, tech={}, expOv={}, expDel=[];
+    const txt={}, proj={}, tech={}, expOv={}, expDel=[], techDel=[];
     for(const [k,v] of Object.entries(s)){
       if(k.startsWith('text-'))             txt[k.slice(5)] = v;
       if(k.startsWith('proj-override-'))    proj[k.slice(14)] = v;
       if(k.startsWith('techcard-override-'))tech[k.slice(18)] = v;
       if(k.startsWith('exp-override-'))     expOv[k.slice(13)] = v;
       if(k.startsWith('exp-deleted-') && v) expDel.push(k.slice(12));
+      if(k.startsWith('techcard-deleted-') && v) techDel.push(k.slice(17));
     }
     if(Object.keys(txt).length)   state.textOverrides    = txt;
     if(Object.keys(proj).length)  state.projectOverrides = proj;
     if(Object.keys(tech).length)  state.techCardOverrides= tech;
     if(Object.keys(expOv).length) state.expOverrides     = expOv;
     if(expDel.length)             state.expDeleted       = expDel;
+    if(techDel.length)            state.techCardDeleted  = techDel;
     if(s.customProjects?.length)  state.customProjects   = s.customProjects;
     if(s.customSkills?.length)    state.customSkills     = s.customSkills;
     if(s.customExp?.length)       state.customExp        = s.customExp;
@@ -1557,6 +1617,9 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     if(s.staticCertOverrides && Object.keys(s.staticCertOverrides||{}).length) state.staticCertOverrides = s.staticCertOverrides;
     if(s.deletedStaticCerts?.length)  state.deletedStaticCerts  = s.deletedStaticCerts;
     if(s.endorsements?.length)        state.endorsements        = s.endorsements;
+    if(s.customEducation?.length)     state.customEducation     = s.customEducation;
+    if(s.deletedStaticEdu?.length)    state.deletedStaticEdu    = s.deletedStaticEdu;
+    if(s.staticEduOverrides && Object.keys(s.staticEduOverrides||{}).length) state.staticEduOverrides = s.staticEduOverrides;
     return state;
   }
 
@@ -1573,6 +1636,7 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     put('techcard-override-', state.techCardOverrides);
     put('exp-override-',      state.expOverrides);
     if(state.expDeleted?.length) state.expDeleted.forEach(e=>{ s['exp-deleted-'+e]=true; });
+    if(state.techCardDeleted?.length) state.techCardDeleted.forEach(k=>{ s['techcard-deleted-'+k]=true; });
     // Custom items — remote is source of truth
     if(state.customProjects) s.customProjects = state.customProjects;
     if(state.customSkills)   s.customSkills   = state.customSkills;
@@ -1587,6 +1651,9 @@ function setStore(d){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }
     if(state.staticCertOverrides) s.staticCertOverrides = state.staticCertOverrides;
     if(state.deletedStaticCerts)  s.deletedStaticCerts  = state.deletedStaticCerts;
     if(state.endorsements)        s.endorsements        = state.endorsements;
+    if(state.customEducation)     s.customEducation     = state.customEducation;
+    if(state.deletedStaticEdu)    s.deletedStaticEdu    = state.deletedStaticEdu;
+    if(state.staticEduOverrides)  s.staticEduOverrides  = state.staticEduOverrides;
     // Record when this remote snapshot was created so we can skip re-fetching same data
     if(state.savedAt) s.__ghSyncedAt = state.savedAt;
     setStore(s);
@@ -1814,6 +1881,8 @@ function rehydrateFromStore(){
   if(typeof restoreStaticCerts==='function') restoreStaticCerts();
   // 11. Endorsements
   if(typeof restoreEndorsements==='function') restoreEndorsements();
+  // 12. Education data
+  if(typeof restoreEduData==='function') restoreEduData();
 }
 
 /* ══════════════════════════════════════════════════════
@@ -2213,7 +2282,7 @@ btnSubmit.addEventListener('click', ()=>{
       card.dataset.region = regionKey;
       const tags = card.querySelectorAll('.project-tag');
       if(tags[0]) tags[0].textContent = rLabel;
-      if(tags[1]) tags[1].textContent = 'LOD '+document.getElementById('f-lod').value;
+      if(tags[1]) tags[1].textContent = document.getElementById('f-lod').value;
       if(tags[2]) tags[2].textContent = document.getElementById('f-type').value;
       const metas = card.querySelectorAll('.project-meta-item');
       const vals  = [document.getElementById('f-area').value.trim(), document.getElementById('f-role').value.trim(),
@@ -2511,7 +2580,7 @@ function restoreProjectOverrides(){
     card.dataset.region=ov.region||card.dataset.region;
     const tags=card.querySelectorAll('.project-tag');
     if(tags[0]) tags[0].textContent=ov.regionLabel||tags[0].textContent;
-    if(tags[1]) tags[1].textContent='LOD '+(ov.lod||'300');
+    if(tags[1]) tags[1].textContent=ov.lod||'LOD 300';
     if(tags[2]) tags[2].textContent=ov.type||tags[2].textContent;
     const metas=card.querySelectorAll('.project-meta-item');
     const vals=[ov.area,ov.role,ov.cde,ov.duration];
@@ -2623,6 +2692,29 @@ skillBtnSubmit.addEventListener('click',()=>{
   skillBackdrop.classList.remove('open');
 });
 
+/* ── Wire delete buttons on ALL static tech cards ── */
+(()=>{
+  function wireStaticTechDel(card){
+    if(card.querySelector('.delete-btn')) return; // already wired
+    const wrap=card.querySelector('.media-wrap'); if(!wrap) return;
+    const slot=wrap.dataset.slot; if(!slot) return;
+    const btn=document.createElement('button');
+    btn.className='delete-btn'; btn.title='Remove card'; btn.textContent='×';
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(!confirm('Remove this skill card?')) return;
+      card.style.display='none';
+      const s=getStore();
+      s['techcard-deleted-'+slot]=true;
+      setStore(s);
+    });
+    wrap.appendChild(btn);
+  }
+  document.querySelectorAll('.tech-card:not([data-skill-id])').forEach(wireStaticTechDel);
+  // Expose for use in restoreTechCards
+  window._wireStaticTechDel=wireStaticTechDel;
+})();
+
 // Restore tech card overrides on load
 function restoreTechCards(){
   const s=getStore();
@@ -2630,6 +2722,11 @@ function restoreTechCards(){
     const ov=s['techcard-override-'+card.dataset.tid]; if(!ov) return;
     const t=card.querySelector('.tech-card-title'); const d=card.querySelector('.tech-card-desc');
     if(t) t.textContent=ov.title; if(d) d.textContent=ov.desc;
+  });
+  // Hide deleted static tech cards
+  document.querySelectorAll('.tech-card:not([data-skill-id])').forEach(card=>{
+    const slot=card.querySelector('.media-wrap')?.dataset.slot;
+    if(slot && s['techcard-deleted-'+slot]) card.style.display='none';
   });
   // Restore custom skill cards (dup-safe)
   (s.customSkills||[]).forEach(sk=>{
@@ -3176,10 +3273,10 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
   function openLightbox(src, isVideo){
     if(!src||src===window.location.href) return;
     if(isVideo){
-      lbVid.src=src; lbVid.style.display=''; lbImg.style.display='none';
+      lbVid.src=src; lbVid.style.display='block'; lbImg.style.display='none';
       lbVid.play().catch(()=>{});
     } else {
-      lbImg.src=src; lbImg.style.display=''; lbVid.style.display='none';
+      lbImg.src=src; lbImg.style.display='block'; lbVid.style.display='none';
       lbVid.pause(); lbVid.src='';
     }
     lbBackdrop.classList.add('open');
@@ -3217,6 +3314,150 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
       if(src){ e.target.pause(); openLightbox(src,true); }
     }
   }, true); // capture phase so it fires before video default behaviour
+})();
+
+/* ══════════════════════════════════════════════════════
+   EDUCATION — ADD / EDIT / DELETE
+   ══════════════════════════════════════════════════════ */
+(()=>{
+  const eduBackdrop =document.getElementById('eduModalBackdrop');
+  const eduBtnCancel=document.getElementById('eduBtnCancel');
+  const eduBtnSubmit=document.getElementById('eduBtnSubmit');
+  const eduCards    =document.getElementById('eduCards');
+  let editingEduId  =null;
+
+  function closeEduModal(){
+    eduBackdrop.classList.remove('open');
+    editingEduId=null;
+    document.getElementById('eduModalTitle').textContent='Add Education';
+    eduBtnSubmit.textContent='Add Education';
+  }
+  document.getElementById('eduModalClose').addEventListener('click',closeEduModal);
+  eduBtnCancel.addEventListener('click',closeEduModal);
+  eduBackdrop.addEventListener('click',e=>{ if(e.target===eduBackdrop) closeEduModal(); });
+
+  // Open modal (add mode)
+  document.getElementById('btnAddEdu')?.addEventListener('click',()=>{
+    editingEduId=null;
+    document.getElementById('eduf-year').value='';
+    document.getElementById('eduf-degree').value='';
+    document.getElementById('eduf-school').value='';
+    document.getElementById('eduModalTitle').textContent='Add Education';
+    eduBtnSubmit.textContent='Add Education';
+    eduBackdrop.classList.add('open');
+  });
+
+  // Build a custom edu card
+  function buildEduCard(e, isNew=false){
+    const card=document.createElement('div');
+    card.className='edu-card'; if(isNew) card.classList.add('fade-in');
+    card.dataset.eduId=e.id;
+    card.innerHTML=`
+      <div class="edu-card-controls">
+        <button class="edu-ctrl-btn edu-ctrl-edit" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="edu-ctrl-btn edu-ctrl-del" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      </div>
+      <div class="edu-year">${e.year||''}</div>
+      <div class="edu-degree">${e.degree||''}</div>
+      <div class="edu-school">${e.school||''}</div>`;
+    wireEduCard(card, e.id, true);
+    return card;
+  }
+
+  // Wire edit/delete on any edu card (static or custom)
+  function wireEduCard(card, id, isCustom){
+    card.querySelector('.edu-ctrl-edit')?.addEventListener('click',e=>{
+      e.stopPropagation();
+      editingEduId=id;
+      document.getElementById('eduf-year').value  =card.querySelector('.edu-year')?.textContent||'';
+      document.getElementById('eduf-degree').value=card.querySelector('.edu-degree')?.textContent||'';
+      document.getElementById('eduf-school').value=card.querySelector('.edu-school')?.textContent||'';
+      document.getElementById('eduModalTitle').textContent='Edit Education';
+      eduBtnSubmit.textContent='Save Changes';
+      eduBackdrop.classList.add('open');
+    });
+    card.querySelector('.edu-ctrl-del')?.addEventListener('click',ev=>{
+      ev.stopPropagation();
+      if(!confirm('Remove this education entry?')) return;
+      card.style.display='none';
+      const s=getStore();
+      if(isCustom){
+        s.customEducation=(s.customEducation||[]).filter(x=>String(x.id)!==String(id));
+      } else {
+        s.deletedStaticEdu=[...new Set([...(s.deletedStaticEdu||[]),String(id)])];
+      }
+      setStore(s);
+    });
+  }
+
+  // Wire static edu cards
+  document.querySelectorAll('.edu-card[data-edu-id]').forEach(card=>{
+    wireEduCard(card, card.dataset.eduId, false);
+  });
+
+  // Submit
+  eduBtnSubmit.addEventListener('click',()=>{
+    const year  =document.getElementById('eduf-year').value.trim();
+    const degree=document.getElementById('eduf-degree').value.trim();
+    const school=document.getElementById('eduf-school').value.trim();
+    if(!year||!degree){ alert('Please enter the year/period and qualification.'); return; }
+
+    if(editingEduId){
+      // Edit existing card
+      const card=document.querySelector(`.edu-card[data-edu-id="${editingEduId}"]`);
+      if(card){
+        const yr=card.querySelector('.edu-year');   if(yr) yr.textContent=year;
+        const dg=card.querySelector('.edu-degree'); if(dg) dg.textContent=degree;
+        const sc=card.querySelector('.edu-school'); if(sc) sc.textContent=school;
+      }
+      const s=getStore();
+      const isStatic=['edu1','edu2'].includes(String(editingEduId));
+      if(isStatic){
+        const ov=s.staticEduOverrides||{};
+        ov[editingEduId]={year,degree,school};
+        s.staticEduOverrides=ov;
+      } else {
+        const idx=(s.customEducation||[]).findIndex(x=>String(x.id)===String(editingEduId));
+        if(idx>=0){ s.customEducation[idx]={...s.customEducation[idx],year,degree,school}; }
+      }
+      setStore(s);
+    } else {
+      const e={id:Date.now(), year, degree, school};
+      const card=buildEduCard(e, true);
+      eduCards.appendChild(card);
+      fadeObs.observe(card);
+      const s=getStore();
+      s.customEducation=[...(s.customEducation||[]),e];
+      setStore(s);
+    }
+    closeEduModal();
+  });
+
+  // Restore on load
+  window.restoreEduData=function(){
+    const s=getStore();
+    // Hide deleted static cards
+    (s.deletedStaticEdu||[]).forEach(id=>{
+      const card=document.querySelector(`.edu-card[data-edu-id="${id}"]`);
+      if(card) card.style.display='none';
+    });
+    // Apply overrides to static cards
+    const ovs=s.staticEduOverrides||{};
+    Object.entries(ovs).forEach(([id,ov])=>{
+      const card=document.querySelector(`.edu-card[data-edu-id="${id}"]`);
+      if(!card) return;
+      const yr=card.querySelector('.edu-year');   if(yr&&ov.year)   yr.textContent=ov.year;
+      const dg=card.querySelector('.edu-degree'); if(dg&&ov.degree) dg.textContent=ov.degree;
+      const sc=card.querySelector('.edu-school'); if(sc&&ov.school) sc.textContent=ov.school;
+    });
+    // Append custom education entries (dup-safe)
+    (s.customEducation||[]).forEach(e=>{
+      if(document.querySelector(`.edu-card[data-edu-id="${e.id}"]`)) return;
+      const card=buildEduCard(e,false);
+      eduCards.appendChild(card);
+    });
+  };
+  restoreEduData();
 })();
 
 function resetForm(){

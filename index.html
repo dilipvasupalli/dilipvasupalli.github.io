@@ -438,7 +438,7 @@ body.edit-mode .tech-card .delete-btn{opacity:1}
 #lightboxClose{position:fixed;top:1.1rem;right:1.1rem;width:40px;height:40px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:50%;color:#fff;font-size:1.35rem;cursor:pointer;z-index:2001;display:flex;align-items:center;justify-content:center;line-height:1;transition:background .2s}
 #lightboxClose:hover{background:rgba(255,255,255,.3)}
 /* Zoom cursor on media (view mode only) */
-body:not(.edit-mode) .img-wrap img,body:not(.edit-mode) .media-wrap img,body:not(.edit-mode) .media-wrap video{cursor:zoom-in}
+body:not(.edit-mode) .img-wrap img,body:not(.edit-mode) .media-wrap img,body:not(.edit-mode) .media-wrap video,body:not(.edit-mode) .cert-badge-wrap img{cursor:zoom-in}
 /* Hide upload placeholder text and block interactions for non-admin visitors */
 body:not(.edit-mode) .media-wrap.empty .media-placeholder-inner{display:none!important}
 body:not(.edit-mode) .media-wrap.empty{pointer-events:none!important;cursor:default!important}
@@ -2073,17 +2073,20 @@ function compressImage(dataUrl){
 /* ══════════════════════════════════════
    CLICK-TO-UPLOAD (images + videos)
    ══════════════════════════════════════ */
+function isEditMode(){ return document.body.classList.contains('edit-mode'); }
+
 function setupUpload(wrap){
   const input = wrap.querySelector('.file-input');
   if(!input) return;
-  // Click the overlay to trigger file picker
+  // Click the overlay to trigger file picker — admin only
   wrap.querySelector('.upload-overlay')?.addEventListener('click', e=>{
+    if(!isEditMode()) return;
     e.stopPropagation();
     input.click();
   });
-  // For empty placeholders, entire wrap is clickable
+  // For empty placeholders, entire wrap is clickable — admin only
   if(wrap.classList.contains('empty')){
-    wrap.addEventListener('click', ()=>input.click());
+    wrap.addEventListener('click', ()=>{ if(!isEditMode()) return; input.click(); });
   }
   input.addEventListener('change', ()=>{
     const file = input.files[0];
@@ -2443,9 +2446,9 @@ function buildCertCard(c, isNew=false){
     if(confirm(`Remove "${c.name}"?`)){ card.remove(); const s=getStore(); s.customCerts=(s.customCerts||[]).filter(x=>x.id!==c.id); delete s[slotKey]; setStore(s); }
   });
 
-  // Upload badge
+  // Upload badge — admin only
   const wrap=card.querySelector('.cert-badge-wrap');
-  wrap.querySelector('.upload-overlay').addEventListener('click',e=>{ e.stopPropagation(); wrap.querySelector('.file-input').click(); });
+  wrap.querySelector('.upload-overlay').addEventListener('click',e=>{ if(!isEditMode()) return; e.stopPropagation(); wrap.querySelector('.file-input').click(); });
   wrap.querySelector('.file-input').addEventListener('change',()=>{
     const file=wrap.querySelector('.file-input').files[0]; if(!file) return;
     const r=new FileReader(); r.onload=ev=>{ let img=wrap.querySelector('img'); if(!img){img=document.createElement('img');img.style.cssText='width:100%;height:100%;object-fit:contain;padding:1.5rem';wrap.prepend(img);} img.src=ev.target.result; wrap.querySelector('.cert-badge-placeholder')?.remove(); const s=getStore(); s[slotKey]=ev.target.result; setStore(s); }; r.readAsDataURL(file);
@@ -2513,7 +2516,7 @@ restoreCustomCerts();
     const data=s[wrap.dataset.slot]; if(!data) return;
     let img=wrap.querySelector('img'); if(!img){img=document.createElement('img');img.style.cssText='width:100%;height:100%;object-fit:contain;padding:1.5rem';wrap.prepend(img);} img.src=data; wrap.querySelector('.cert-badge-placeholder')?.remove();
     // wire upload
-    wrap.querySelector('.upload-overlay')?.addEventListener('click',e=>{ e.stopPropagation(); wrap.querySelector('.file-input').click(); });
+    wrap.querySelector('.upload-overlay')?.addEventListener('click',e=>{ if(!isEditMode()) return; e.stopPropagation(); wrap.querySelector('.file-input').click(); });
     wrap.querySelector('.file-input')?.addEventListener('change',()=>{ const file=wrap.querySelector('.file-input').files[0]; if(!file) return; const r=new FileReader(); r.onload=ev=>{ let i=wrap.querySelector('img'); if(!i){i=document.createElement('img');i.style.cssText='width:100%;height:100%;object-fit:contain;padding:1.5rem';wrap.prepend(i);} i.src=ev.target.result; const ss=getStore(); ss[wrap.dataset.slot]=ev.target.result; setStore(ss); }; r.readAsDataURL(file); });
   });
 
@@ -2523,7 +2526,7 @@ restoreCustomCerts();
     const ov=wrap.querySelector('.upload-overlay');
     const fi=wrap.querySelector('.file-input');
     if(!ov||!fi) return;
-    ov.addEventListener('click',e=>{ e.stopPropagation(); fi.click(); });
+    ov.addEventListener('click',e=>{ if(!isEditMode()) return; e.stopPropagation(); fi.click(); });
     fi.addEventListener('change',()=>{ const file=fi.files[0]; if(!file) return; const r=new FileReader(); r.onload=ev=>{ let img=wrap.querySelector('img'); if(!img){img=document.createElement('img');img.style.cssText='width:100%;height:100%;object-fit:contain;padding:1.5rem;display:block';wrap.prepend(img);} img.src=ev.target.result; wrap.querySelector('.cert-badge-placeholder')?.remove(); const ss=getStore(); ss[wrap.dataset.slot]=ev.target.result; setStore(ss); }; r.readAsDataURL(file); });
   });
 })();
@@ -2881,7 +2884,7 @@ function setupMediaUpload(wrap){
   const ov=wrap.querySelector('.upload-overlay');
   const fi=wrap.querySelector('.file-input');
   if(!ov||!fi) return;
-  ov.addEventListener('click',e=>{ e.stopPropagation(); fi.click(); });
+  ov.addEventListener('click',e=>{ if(!isEditMode()) return; e.stopPropagation(); fi.click(); });
   fi.addEventListener('change',()=>{
     const file=fi.files[0]; if(!file) return;
     const r=new FileReader();
@@ -3302,9 +3305,9 @@ document.querySelectorAll('.cert-card[data-cert-id]').forEach(card=>{
   document.addEventListener('click',e=>{
     if(document.body.classList.contains('edit-mode')) return;
 
-    // Image click inside .img-wrap or .media-wrap
+    // Image click inside .img-wrap, .media-wrap, or .cert-badge-wrap
     if(e.target.tagName==='IMG'){
-      const wrap=e.target.closest('.img-wrap,.media-wrap');
+      const wrap=e.target.closest('.img-wrap,.media-wrap,.cert-badge-wrap');
       if(!wrap) return;
       // Skip modal preview images
       if(e.target.id==='modalImgPreview'||e.target.id==='certImgPreview') return;
@@ -3473,6 +3476,8 @@ function resetForm(){
   document.getElementById('f-type').selectedIndex=0;
   document.getElementById('f-lod').selectedIndex=2;
   document.getElementById('customCountryRow').style.display='none';
+  document.getElementById('modalImgUpload').classList.remove('has-image');
+  document.getElementById('modalImgPreview').src='';
   document.getElementById('modalImgUpload').classList.remove('has-image');
   document.getElementById('modalImgPreview').src='';
   document.getElementById('modalImgFile').value='';

@@ -1556,6 +1556,13 @@ body:not(.edit-mode) .media-wrap.empty .upload-overlay{display:none!important}
   </div>
 </div>
 
+<!-- ══════════════ LIGHTBOX ══════════════ -->
+<div id="lightboxBackdrop">
+  <button id="lightboxClose" title="Close (Esc)">×</button>
+  <img id="lightboxImg" src="" alt="Expanded view">
+  <video id="lightboxVid" controls playsinline></video>
+</div>
+
 <!-- ══════════════ JAVASCRIPT ══════════════ -->
 <script>
 const STORE_KEY = 'dv_portfolio_v2';
@@ -3472,12 +3479,6 @@ function resetForm(){
   pendingImgData=null;
 }
 </script>
-<!-- ══════════════ LIGHTBOX ══════════════ -->
-<div id="lightboxBackdrop">
-  <button id="lightboxClose" title="Close (Esc)">×</button>
-  <img id="lightboxImg" src="" alt="Expanded view">
-  <video id="lightboxVid" controls playsinline></video>
-</div>
 
 <!-- Sync toast (shown while loading remote data) -->
 <div id="syncToast">

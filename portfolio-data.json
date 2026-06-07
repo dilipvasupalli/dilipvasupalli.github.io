@@ -340,6 +340,20 @@
       "imgData": "portfolio-images/cp_1779012248011.jpg"
     }
   ],
+  "customSkills": [
+    {
+      "id": 1780837756490,
+      "title": "Check Parameter Completeness of a RevitModel",
+      "desc": "Checks the Revit model parameters without having the model opened.",
+      "tab": ""
+    },
+    {
+      "id": 1780837814832,
+      "title": "Parameter Completeness",
+      "desc": "",
+      "tab": ""
+    }
+  ],
   "customCerts": [
     {
       "id": 1779018359347,
@@ -349,6 +363,24 @@
       "credId": "",
       "desc": "",
       "imgData": "portfolio-images/cc_1779018359347.jpg"
+    },
+    {
+      "id": 1780838446243,
+      "name": "Advanced Dynamo & Design Scripting",
+      "issuer": "Autodesk",
+      "date": "2026",
+      "credId": "",
+      "desc": "",
+      "imgData": "portfolio-images/cc_1780838446243.jpg"
+    },
+    {
+      "id": 1780838482104,
+      "name": "Dynamo Python Scripting & Revit API",
+      "issuer": "Autodesk",
+      "date": "2026",
+      "credId": "",
+      "desc": "",
+      "imgData": "portfolio-images/cc_1780838482104.jpg"
     }
   ],
   "imageSlots": {
@@ -386,13 +418,22 @@
     "fam-2": "portfolio-images/fam-2.jpg",
     "cert-rics": "portfolio-images/cert-rics.jpg",
     "cert-p1": "portfolio-images/cert-p1.jpg",
-    "cert-custom-1779018359347": "portfolio-images/cc_1779018359347.jpg"
+    "cert-custom-1779018359347": "portfolio-images/cc_1779018359347.jpg",
+    "cert-custom-1780838446243": "portfolio-images/cc_1780838446243.jpg",
+    "cert-custom-1780838482104": "portfolio-images/cc_1780838482104.jpg"
   },
   "addedSkillTags": [
     "Laser Scanning",
     "4D Simulations",
     "5D Cost & Quantity Takeoff",
     "RevitAPI & NavisworksAPI"
+  ],
+  "customTechCategories": [
+    {
+      "id": "cat-1780837679970",
+      "name": "C# Plugins",
+      "intro": "Plugins created using C# to automate repeated BIM Coordination tasks."
+    }
   ],
   "staticCertOverrides": {
     "placeholder-1": {
@@ -434,5 +475,5 @@
       "review": "Dilip is a dedicated BIM professional with a strong understanding of project requirements and digital construction workflows. His ability to coordinate with multiple stakeholders and deliver tasks efficiently makes him a valuable asset to any BIM team."
     }
   ],
-  "savedAt": 1779083030310
+  "savedAt": 1780838524358
 }
